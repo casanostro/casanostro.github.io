@@ -9,9 +9,18 @@ const Footer = () => {
       <div className="container mx-auto animate-terminal-boot">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
-            <Link href="/">
-              <div className="font-robco text-2xl text-terminal-green mb-2">ROBCO INDUSTRIES™</div>
-            </Link>
+            <a 
+              href="/"
+              className="block font-robco text-2xl text-terminal-green mb-2 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", "/");
+                const navEvent = new PopStateEvent('popstate');
+                window.dispatchEvent(navEvent);
+              }}
+            >
+              TERMINAL PRO™
+            </a>
             <p className="font-terminal text-sm text-terminal-text">
               <span className="text-pip-amber">[</span> SYSTÈME EN LIGNE <span className="text-pip-amber">]</span> COPYRIGHT {currentYear}
             </p>
@@ -45,7 +54,7 @@ const Footer = () => {
       
       {/* Terminal status bar */}
       <div className="mt-4 bg-terminal-bg border-y border-terminal-green py-1 px-4 text-xs font-terminal text-terminal-green flex justify-between">
-        <span>- ROBCO INDUSTRIES (TM) TERMINVS -</span>
+        <span>- TERMINAL PRO (TM) 2025 -</span>
         <span>- CONNEXION SÉCURISÉE -</span>
       </div>
     </footer>

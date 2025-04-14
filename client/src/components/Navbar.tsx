@@ -29,11 +29,18 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex items-center">
-            <Link href="/">
-              <div className="font-robco text-2xl md:text-3xl text-terminal-header hover:text-pip-green transition-colors duration-200">
-                TERMINAL RobCo
-              </div>
-            </Link>
+            <a 
+              href="/"
+              className="font-robco text-2xl md:text-3xl text-terminal-header hover:text-pip-green transition-colors duration-200 cursor-pointer block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", "/");
+                const navEvent = new PopStateEvent('popstate');
+                window.dispatchEvent(navEvent);
+              }}
+            >
+              TERMINAL PRO
+            </a>
           </div>
           
           {/* Mobile menu button */}
@@ -58,16 +65,22 @@ const Navbar = () => {
                 { path: '/contact', label: 'CONTACT' }
               ].map((item) => (
                 <li key={item.path} className="mb-3 lg:mb-0 lg:ml-8">
-                  <Link href={item.path}>
-                    <div className={`font-terminal text-sm cursor-pointer
+                  <a 
+                    href={item.path}
+                    className={`font-terminal text-sm cursor-pointer block
                       ${location === item.path 
                         ? 'text-pip-green' 
                         : 'text-terminal-green hover:text-pip-green'} 
                       transition-colors duration-200`}
-                    >
-                      [&#8226; {item.label} ]
-                    </div>
-                  </Link>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, "", item.path);
+                      const navEvent = new PopStateEvent('popstate');
+                      window.dispatchEvent(navEvent);
+                    }}
+                  >
+                    [&#8226; {item.label} ]
+                  </a>
                 </li>
               ))}
             </ul>

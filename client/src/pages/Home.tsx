@@ -88,10 +88,10 @@ const Home = () => {
           <div className="bg-terminal-dark p-6 border border-terminal-green mb-4">
             <div className="mb-4">
               <div className="font-robco text-2xl text-terminal-header">
-                ROBCO INDUSTRIES UNIFIED OPERATING SYSTEM
+                SYSTÈME D'EXPLOITATION UNIFIÉ
               </div>
               <div className="font-terminal text-terminal-text text-sm">
-                COPYRIGHT 2075-2077 ROBCO INDUSTRIES
+                COPYRIGHT 2025 - TOUS DROITS RÉSERVÉS
               </div>
               <div className="h-0.5 bg-terminal-green/30 my-3"></div>
             </div>
@@ -159,21 +159,42 @@ const Home = () => {
           </div>
           
           <div className="mb-8 flex flex-wrap gap-3">
-            <Link href="/projects">
-              <div className="font-terminal text-sm px-4 py-2 border border-terminal-green text-terminal-green hover:bg-terminal-green hover:text-terminal-dark transition-colors cursor-pointer">
-                [ EXPÉRIENCE ]
-              </div>
-            </Link>
-            <Link href="/about">
-              <div className="font-terminal text-sm px-4 py-2 border border-pip-green text-pip-green hover:bg-pip-green hover:text-terminal-dark transition-colors cursor-pointer">
-                [ COMPÉTENCES ]
-              </div>
-            </Link>
-            <Link href="/contact">
-              <div className="font-terminal text-sm px-4 py-2 border border-pip-amber text-pip-amber hover:bg-pip-amber hover:text-terminal-dark transition-colors cursor-pointer">
-                [ CONTACT ]
-              </div>
-            </Link>
+            <a 
+              href="/projects"
+              className="font-terminal text-sm px-4 py-2 border border-terminal-green text-terminal-green hover:bg-terminal-green hover:text-terminal-dark transition-colors cursor-pointer inline-block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", "/projects");
+                const navEvent = new PopStateEvent('popstate');
+                window.dispatchEvent(navEvent);
+              }}
+            >
+              [ EXPÉRIENCE ]
+            </a>
+            <a 
+              href="/about"
+              className="font-terminal text-sm px-4 py-2 border border-pip-green text-pip-green hover:bg-pip-green hover:text-terminal-dark transition-colors cursor-pointer inline-block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", "/about");
+                const navEvent = new PopStateEvent('popstate');
+                window.dispatchEvent(navEvent);
+              }}
+            >
+              [ COMPÉTENCES ]
+            </a>
+            <a 
+              href="/contact"
+              className="font-terminal text-sm px-4 py-2 border border-pip-amber text-pip-amber hover:bg-pip-amber hover:text-terminal-dark transition-colors cursor-pointer inline-block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, "", "/contact");
+                const navEvent = new PopStateEvent('popstate');
+                window.dispatchEvent(navEvent);
+              }}
+            >
+              [ CONTACT ]
+            </a>
           </div>
           
           <div className="py-4 border-t border-terminal-green/30">
