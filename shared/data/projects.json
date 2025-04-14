@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "NEURAL PULSE",
+    "slug": "neural-pulse",
+    "description": "AI-driven analytics dashboard with retro interface aesthetics.",
+    "image": "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?q=80&w=500&h=300&fit=crop",
+    "badge": "PROJECT_01",
+    "badgeColor": "neon-green",
+    "tags": ["React.js", "Node.js", "MongoDB"],
+    "projectUrl": "#",
+    "sourceUrl": "#"
+  },
+  {
+    "id": 2,
+    "title": "RETROWAVE AUDIO",
+    "slug": "retrowave-audio",
+    "description": "Browser-based synthesizer with visualization tools and sharing capabilities.",
+    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=500&h=300&fit=crop", 
+    "badge": "PROJECT_02",
+    "badgeColor": "hot-pink",
+    "tags": ["JavaScript", "Web Audio API", "Firebase"],
+    "projectUrl": "#",
+    "sourceUrl": "#"
+  },
+  {
+    "id": 3,
+    "title": "PIXELVERSE",
+    "slug": "pixelverse",
+    "description": "Social network for pixel artists with collaborative editing features.",
+    "image": "https://images.unsplash.com/photo-1536104968055-4d61aa56f46a?q=80&w=500&h=300&fit=crop",
+    "badge": "PROJECT_03",
+    "badgeColor": "electric-blue",
+    "tags": ["Vue.js", "Express", "Socket.io"],
+    "projectUrl": "#",
+    "sourceUrl": "#"
+  },
+  {
+    "id": 4,
+    "title": "CYBERLOG",
+    "slug": "cyberlog",
+    "description": "Markdown-based blogging platform with retro-computing aesthetic.",
+    "image": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=500&h=300&fit=crop",
+    "badge": "PROJECT_04",
+    "badgeColor": "neon-green",
+    "tags": ["Next.js", "GraphQL", "Prisma"],
+    "projectUrl": "#",
+    "sourceUrl": "#"
+  }
+]
