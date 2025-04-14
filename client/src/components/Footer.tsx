@@ -6,11 +6,11 @@ const Footer = () => {
 
   return (
     <footer className="bg-terminal-dark border-t-2 border-terminal-green py-6 px-4">
-      <div className="container mx-auto">
+      <div className="container mx-auto animate-terminal-boot">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
             <Link href="/">
-              <a className="font-robco text-2xl text-terminal-green mb-2">ROBCO INDUSTRIES™</a>
+              <div className="font-robco text-2xl text-terminal-green mb-2">ROBCO INDUSTRIES™</div>
             </Link>
             <p className="font-terminal text-sm text-terminal-text">
               <span className="text-pip-amber">[</span> SYSTÈME EN LIGNE <span className="text-pip-amber">]</span> COPYRIGHT {currentYear}

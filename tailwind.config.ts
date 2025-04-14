@@ -11,16 +11,14 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        // Nouveau thème brutalist sci-fi
-        "neon-blue": "var(--neon-blue)",
-        "neon-magenta": "var(--neon-magenta)",
-        "neon-purple": "var(--neon-purple)",
-        "digital-black": "var(--digital-black)",
-        "dark-slate": "var(--dark-slate)",
-        "medium-slate": "var(--medium-slate)",
-        "light-slate": "var(--light-slate)",
-        "cyber-gray": "var(--cyber-gray)",
-        "future-white": "var(--future-white)",
+        // RobCo terminal theme
+        "terminal-green": "var(--terminal-green)",
+        "terminal-header": "var(--terminal-header)",
+        "terminal-text": "var(--terminal-text)",
+        "terminal-dark": "var(--terminal-dark)",
+        "terminal-bg": "var(--terminal-bg)",
+        "pip-green": "var(--pip-green)",
+        "pip-amber": "var(--pip-amber)",
 
         // Couleurs Shadcn d'origine
         background: "hsl(var(--background))",
@@ -91,47 +89,39 @@ export default {
             height: "0",
           },
         },
-        "pulse": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.6" },
-        },
-        "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        "glitch": {
+        "terminal-boot": {
           "0%": {
-            clipPath: "polygon(0 2%, 100% 2%, 100% 5%, 0 5%)",
-            transform: "translate(0)",
+            opacity: "0",
+            filter: "brightness(2) blur(5px)",
           },
           "20%": {
-            clipPath: "polygon(0 15%, 100% 15%, 100% 15%, 0 15%)",
-            transform: "translate(-5px)",
+            opacity: "0.6",
+            filter: "brightness(3) blur(3px)",
           },
           "40%": {
-            clipPath: "polygon(0 10%, 100% 10%, 100% 20%, 0 20%)",
-            transform: "translate(5px)",
+            opacity: "0.8",
+            filter: "brightness(1.5) blur(2px)",
           },
           "60%": {
-            clipPath: "polygon(0 1%, 100% 1%, 100% 2%, 0 2%)",
-            transform: "translate(0)",
+            opacity: "0.4",
+            filter: "brightness(2) blur(0)",
+          },
+          "80%": {
+            opacity: "0.8",
+            filter: "brightness(1.2) blur(1px)",
           },
           "100%": {
-            clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
-            transform: "translate(0)",
+            opacity: "1",
+            filter: "brightness(1) blur(0)",
           },
         },
-        "flicker": {
+        "terminal-flicker": {
           "0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%": {
             opacity: "0.99",
           },
           "20%, 21.999%, 63%, 63.999%, 65%, 69.999%": {
-            opacity: "0.4",
+            opacity: "0.7",
           },
-        },
-        "scan-line": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(100vh)" },
         },
         "cursor-blink": {
           "0%, 100%": { opacity: "0" },
@@ -141,12 +131,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 6s ease-in-out infinite",
-        "glitch": "glitch 4s linear infinite",
-        "flicker": "flicker 3s linear infinite",
-        "scan-line": "scan-line 2s linear infinite",
-        "cursor-blink": "cursor-blink 1s infinite",
+        "terminal-boot": "terminal-boot 1.5s ease-in-out",
+        "terminal-flicker": "terminal-flicker 4s linear infinite",
+        "cursor-blink": "cursor-blink 1s step-end infinite",
       },
     },
   },
