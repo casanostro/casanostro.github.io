@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
-  const [bootupComplete, setBootupComplete] = useState(false);
+  const [glitchActive, setGlitchActive] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    // Trigger glitch effect when menu is toggled
+    setGlitchActive(true);
+    setTimeout(() => setGlitchActive(false), 1000);
   };
 
   // Close menu when navigating to a new route
@@ -15,80 +19,109 @@ const Navbar = () => {
     setIsMenuOpen(false);
   }, [location]);
 
-  // RobCo terminal bootup animation
+  // Parallax effect on nav when scrolling
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setBootupComplete(true);
-    }, 1000);
-    
-    return () => clearTimeout(timeout);
+    const handleScroll = () => {
+      if (navRef.current) {
+        const scrollY = window.scrollY;
+        const parallaxValue = scrollY * 0.05;
+        navRef.current.style.boxShadow = `0 ${5 + parallaxValue}px 20px rgba(0, 240, 255, ${0.1 + scrollY * 0.001})`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // On page load animation
+  useEffect(() => {
+    setGlitchActive(true);
+    setTimeout(() => setGlitchActive(false), 1500);
   }, []);
 
   return (
-    <nav className="bg-terminal-dark border-b-2 border-terminal-green sticky top-0 z-50 terminal-flicker">
-      <div className="robco-header">
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex flex-wrap items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/">
-                <a className="font-robco text-3xl md:text-4xl text-terminal-header mr-2">ROBCO INDUSTRIES (TM)</a>
-              </Link>
-              <div className="h-4 w-4 bg-terminal-green animate-cursor-blink"></div>
-            </div>
-            
-            <button 
-              id="menu-toggle" 
-              className="lg:hidden block px-3 py-2 border-2 border-terminal-green text-terminal-green" 
-              aria-label="Toggle menu"
-              onClick={toggleMenu}
-            >
-              <div className="w-5 h-0.5 bg-terminal-green mb-1"></div>
-              <div className="w-5 h-0.5 bg-terminal-green mb-1"></div>
-              <div className="w-5 h-0.5 bg-terminal-green"></div>
-            </button>
-            
-            <div className={`${isMenuOpen ? 'block' : 'hidden'} w-full lg:flex lg:w-auto lg:items-center mt-2 lg:mt-0`}>
-              <ul className="flex flex-col lg:flex-row">
-                <li className="mb-2 lg:mb-0 lg:mr-6">
-                  <Link href="/">
-                    <a className={`font-terminal text-sm ${location === '/' ? 'text-pip-green' : 'text-terminal-green hover:text-pip-green'} transition-colors duration-200`}>
-                      [ACCUEIL]
+    <nav 
+      ref={navRef}
+      className={`bg-dark-slate border-b border-neon-blue sticky top-0 z-50 ${glitchActive ? 'animate-glitch' : ''}`}
+    >
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/">
+              <a className="font-future text-2xl md:text-3xl text-future-white relative group">
+                <span className="relative z-10 group-hover:text-neon-blue transition-colors duration-300">ADRIEN TRIPON</span>
+                <span className={`absolute -inset-1 bg-gradient-to-r from-neon-magenta via-neon-purple to-neon-blue opacity-0 group-hover:opacity-25 duration-300 blur-xl transition-opacity`}></span>
+              </a>
+            </Link>
+            <div className="ml-4 h-5 w-1 bg-neon-blue animate-pulse-slow"></div>
+          </div>
+          
+          {/* Mobile menu button */}
+          <button 
+            id="menu-toggle" 
+            className="lg:hidden block p-3 border border-neon-blue" 
+            aria-label="Toggle menu"
+            onClick={toggleMenu}
+          >
+            <div className="w-6 h-0.5 bg-neon-blue mb-1.5"></div>
+            <div className="w-6 h-0.5 bg-neon-blue mb-1.5"></div>
+            <div className="w-6 h-0.5 bg-neon-blue"></div>
+          </button>
+          
+          {/* Nav links */}
+          <div className={`${isMenuOpen ? 'block' : 'hidden'} w-full lg:flex lg:w-auto lg:items-center mt-4 lg:mt-0`}>
+            <ul className="flex flex-col lg:flex-row">
+              {[
+                { path: '/', label: 'ACCUEIL' },
+                { path: '/projects', label: 'EXPÉRIENCE' },
+                { path: '/about', label: 'COMPÉTENCES' },
+                { path: '/contact', label: 'CONTACT' }
+              ].map((item, index) => (
+                <li key={item.path} className="mb-3 lg:mb-0 lg:ml-8">
+                  <Link href={item.path}>
+                    <a className={`font-mono text-sm relative group overflow-hidden inline-block
+                      ${location === item.path 
+                        ? 'text-neon-blue' 
+                        : 'text-future-white hover:text-neon-blue'} 
+                      transition-colors duration-200`}
+                    >
+                      {/* Animated underline effect */}
+                      <span className="relative z-10">{item.label}</span>
+                      <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-neon-blue transform ${location === item.path ? 'translate-x-0' : 'translate-x-[-100%]'} group-hover:translate-x-0 transition-transform duration-300 ease-out`}></span>
                     </a>
                   </Link>
                 </li>
-                <li className="mb-2 lg:mb-0 lg:mr-6">
-                  <Link href="/projects">
-                    <a className={`font-terminal text-sm ${location === '/projects' ? 'text-pip-green' : 'text-terminal-green hover:text-pip-green'} transition-colors duration-200`}>
-                      [EXPÉRIENCE]
-                    </a>
-                  </Link>
-                </li>
-                <li className="mb-2 lg:mb-0 lg:mr-6">
-                  <Link href="/about">
-                    <a className={`font-terminal text-sm ${location === '/about' ? 'text-pip-green' : 'text-terminal-green hover:text-pip-green'} transition-colors duration-200`}>
-                      [COMPÉTENCES]
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact">
-                    <a className={`font-terminal text-sm ${location === '/contact' ? 'text-pip-green' : 'text-terminal-green hover:text-pip-green'} transition-colors duration-200`}>
-                      [CONTACT]
-                    </a>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
       
-      {/* Terminal info line */}
-      <div className="bg-terminal-bg border-y border-terminal-green py-1 px-4 text-xs font-terminal text-terminal-green flex justify-between">
-        <span>TERMINAL_V1.0</span>
-        <span>ADRIEN_TRIPON</span>
-        <span>MÉMOIRE: 64K</span>
-        <span className="hidden md:inline">SYSTÈME OPÉRATIONNEL</span>
+      {/* Info line with animated gradients */}
+      <div className="bg-medium-slate py-1 px-4 text-xs font-mono text-cyber-gray flex justify-between overflow-hidden relative">
+        {/* Animated scan line */}
+        <div className="absolute inset-0 animate-scan opacity-30 pointer-events-none"></div>
+        
+        <span>
+          <span className="text-neon-blue">[</span> 
+          PORTFOLIO_v.2.1
+          <span className="text-neon-blue">]</span>
+        </span>
+        <span className="hidden md:inline">
+          <span className="text-neon-blue">&lt;</span> 
+          SUPPLY CHAIN EXPERT
+          <span className="text-neon-blue">&gt;</span>
+        </span>
+        <span className="hidden lg:inline">
+          <span className="text-neon-magenta">[</span>
+          {new Date().toLocaleDateString('fr-FR')}
+          <span className="text-neon-magenta">]</span>
+        </span>
+        <span>
+          <span className="text-neon-purple">&lt;/</span>
+          MODE: ONLINE
+          <span className="text-neon-purple">&gt;</span>
+        </span>
       </div>
     </nav>
   );

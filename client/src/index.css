@@ -218,7 +218,8 @@
   
   /* High-tech UI elements */
   .tech-divider {
-    @apply w-full h-px bg-gradient-to-r from-transparent via-neon-blue to-transparent;
+    @apply w-full h-px;
+    background: linear-gradient(to right, transparent, var(--neon-blue), transparent);
   }
   
   .tech-card {
