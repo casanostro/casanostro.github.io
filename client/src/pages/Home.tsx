@@ -205,16 +205,20 @@ const Home = () => {
               </p>
               
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link href="/projects">
-                  <a className="neon-button">
-                    EXPÉRIENCE
-                  </a>
-                </Link>
-                <Link href="/about">
-                  <a className="magenta-button">
-                    COMPÉTENCES
-                  </a>
-                </Link>
+                <span className="inline-block">
+                  <Link href="/projects">
+                    <a className="neon-button">
+                      EXPÉRIENCE
+                    </a>
+                  </Link>
+                </span>
+                <span className="inline-block">
+                  <Link href="/about">
+                    <a className="magenta-button">
+                      COMPÉTENCES
+                    </a>
+                  </Link>
+                </span>
               </div>
             </div>
             

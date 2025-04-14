@@ -47,12 +47,12 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-wrap items-center justify-between">
           <div className="flex items-center">
-            <Link href="/">
-              <a className="font-future text-2xl md:text-3xl text-future-white relative group">
-                <span className="relative z-10 group-hover:text-neon-blue transition-colors duration-300">ADRIEN TRIPON</span>
-                <span className={`absolute -inset-1 bg-gradient-to-r from-neon-magenta via-neon-purple to-neon-blue opacity-0 group-hover:opacity-25 duration-300 blur-xl transition-opacity`}></span>
-              </a>
-            </Link>
+            <div className="font-future text-2xl md:text-3xl text-future-white relative group">
+              <Link href="/">
+                <a className="relative z-10 group-hover:text-neon-blue transition-colors duration-300">ADRIEN TRIPON</a>
+              </Link>
+              <span className={`absolute -inset-1 bg-gradient-to-r from-neon-magenta via-neon-purple to-neon-blue opacity-0 group-hover:opacity-25 duration-300 blur-xl transition-opacity`}></span>
+            </div>
             <div className="ml-4 h-5 w-1 bg-neon-blue animate-pulse-slow"></div>
           </div>
           
@@ -78,18 +78,14 @@ const Navbar = () => {
                 { path: '/contact', label: 'CONTACT' }
               ].map((item, index) => (
                 <li key={item.path} className="mb-3 lg:mb-0 lg:ml-8">
-                  <Link href={item.path}>
-                    <a className={`font-mono text-sm relative group overflow-hidden inline-block
-                      ${location === item.path 
-                        ? 'text-neon-blue' 
-                        : 'text-future-white hover:text-neon-blue'} 
-                      transition-colors duration-200`}
-                    >
-                      {/* Animated underline effect */}
-                      <span className="relative z-10">{item.label}</span>
-                      <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-neon-blue transform ${location === item.path ? 'translate-x-0' : 'translate-x-[-100%]'} group-hover:translate-x-0 transition-transform duration-300 ease-out`}></span>
-                    </a>
-                  </Link>
+                  <div className="relative group overflow-hidden inline-block">
+                    <Link href={item.path}>
+                      <a className={`font-mono text-sm ${location === item.path ? 'text-neon-blue' : 'text-future-white hover:text-neon-blue'} transition-colors duration-200`}>
+                        <span className="relative z-10">{item.label}</span>
+                      </a>
+                    </Link>
+                    <span className={`absolute bottom-0 left-0 w-full h-[2px] bg-neon-blue transform ${location === item.path ? 'translate-x-0' : 'translate-x-[-100%]'} group-hover:translate-x-0 transition-transform duration-300 ease-out`}></span>
+                  </div>
                 </li>
               ))}
             </ul>
