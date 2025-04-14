@@ -6,71 +6,82 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    setIsSelected(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    setIsSelected(false);
   };
 
   const badgeColorClass = 
-    project.badgeColor === 'neon-green' ? 'bg-neon-green' : 
-    project.badgeColor === 'electric-blue' ? 'bg-electric-blue' : 
-    project.badgeColor === 'hot-pink' ? 'bg-hot-pink' : 'bg-neon-green';
+    project.badgeColor === 'pip-green' ? 'bg-pip-green' : 
+    project.badgeColor === 'pip-amber' ? 'bg-pip-amber' : 
+    'bg-terminal-green';
+
+  const textColorClass = 
+    project.badgeColor === 'pip-green' ? 'text-pip-green' : 
+    project.badgeColor === 'pip-amber' ? 'text-pip-amber' : 
+    'text-terminal-green';
 
   return (
     <div 
-      className={`bg-dark-gray p-4 border-2 border-electric-blue hover:border-neon-green transition-all duration-300 transform hover:-translate-y-2 ${isHovered ? 'animate-glitch' : ''}`}
+      className={`bg-terminal-dark p-4 border border-terminal-green ${isSelected ? 'terminal-border' : ''} transition-all duration-300`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative overflow-hidden mb-4">
-        <div className="aspect-w-16 aspect-h-9 bg-black">
+      <div className="flex items-start mb-2">
+        <div className={`${textColorClass} font-terminal text-lg mr-2`}>●</div>
+        <h3 className="font-robco text-2xl text-terminal-header uppercase">{project.title}</h3>
+      </div>
+      
+      <div className="relative overflow-hidden mb-4 border border-terminal-green/50">
+        <div className="aspect-w-16 aspect-h-9 bg-terminal-bg relative">
+          <div className="absolute inset-0 bg-gradient-to-t from-terminal-bg/50 to-transparent z-10"></div>
           <img 
             src={project.image}
-            alt={`${project.title} project`}
-            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+            alt={`${project.title}`}
+            className="object-cover w-full h-full opacity-70 group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-navy/70 to-transparent"></div>
-        </div>
-        <div className={`absolute top-2 left-2 ${badgeColorClass} text-dark-navy px-2 py-1 font-retro text-xs`}>
-          {project.badge}
+          <div className={`absolute top-0 left-0 ${badgeColorClass} text-terminal-bg px-2 py-1 font-terminal text-xs z-20`}>
+            {project.badge}
+          </div>
+          {isSelected && (
+            <div className="absolute inset-0 bg-terminal-green/5 animate-terminal-flicker z-5"></div>
+          )}
         </div>
       </div>
       
-      <h3 className="font-pixel text-2xl text-electric-blue mb-2">{project.title}</h3>
-      
-      <p className="font-code text-sm text-light-gray mb-4">
+      <div className="font-terminal text-sm text-terminal-text mb-4 terminal-prompt">
         {project.description}
-      </p>
+      </div>
       
       <div className="flex flex-wrap gap-2 mb-4">
         {project.tags.map((tag, index) => (
-          <span key={index} className="inline-block bg-dark-navy text-hot-pink text-xs font-code px-2 py-1 border border-hot-pink">
+          <span key={index} className="inline-block bg-terminal-bg text-terminal-green text-xs font-terminal px-2 py-1 border border-terminal-green/70">
             {tag}
           </span>
         ))}
       </div>
       
-      <div className="flex justify-between pt-3 border-t border-gray-700">
+      <div className="flex justify-between pt-3 border-t border-terminal-green/30">
         <a 
           href={project.projectUrl} 
-          className="font-retro text-xs text-neon-green hover:underline"
+          className="font-terminal text-xs text-pip-green hover:underline"
           target="_blank" 
           rel="noopener noreferrer"
         >
-          [VIEW PROJECT]
+          [DÉTAILS]
         </a>
         <a 
           href={project.sourceUrl} 
-          className="font-retro text-xs text-electric-blue hover:underline"
+          className="font-terminal text-xs text-terminal-green hover:text-pip-green transition-colors"
           target="_blank" 
           rel="noopener noreferrer"
         >
-          [SOURCE CODE]
+          [FICHIERS]
         </a>
       </div>
     </div>
