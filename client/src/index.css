@@ -3,12 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --neon-green: #39FF14;
-  --electric-blue: #0FF0FC;
-  --hot-pink: #FF3366;
-  --dark-navy: #0D0E2F;
-  --light-gray: #EBEBEB;
-  --dark-gray: #222222;
+  --pip-green: #2ECC71;
+  --pip-amber: #FFA534;
+  --robco-green: #4CAF50;
+  --terminal-green: #58D68D;
+  --terminal-bg: #0F0F0F;
+  --terminal-text: #58D68D;
+  --terminal-dark: #1C1C1C;
+  --terminal-light: #58D68D;
+  --terminal-header: #2ECC71;
 }
 
 @layer base {
@@ -18,74 +21,73 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Space Mono', monospace;
-    background-color: var(--dark-navy);
-    color: var(--light-gray);
+    font-family: 'Share Tech Mono', monospace;
+    background-color: var(--terminal-bg);
+    color: var(--terminal-text);
+    position: relative;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-family: 'Share Tech Mono', monospace;
   }
 }
 
 @layer components {
-  .font-pixel {
+  .font-terminal {
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .font-robco {
     font-family: 'VT323', monospace;
   }
 
-  .font-retro {
-    font-family: 'Press Start 2P', cursive;
+  .font-pip {
+    font-family: 'Share Tech Mono', monospace;
   }
 
-  .font-code {
-    font-family: 'Space Mono', monospace;
+  .text-terminal-green {
+    color: var(--terminal-green);
   }
 
-  .text-neon-green {
-    color: var(--neon-green);
+  .text-pip-green {
+    color: var(--pip-green);
   }
 
-  .text-electric-blue {
-    color: var(--electric-blue);
+  .text-pip-amber {
+    color: var(--pip-amber);
   }
 
-  .text-hot-pink {
-    color: var(--hot-pink);
+  .bg-terminal-bg {
+    background-color: var(--terminal-bg);
   }
 
-  .bg-neon-green {
-    background-color: var(--neon-green);
+  .bg-terminal-dark {
+    background-color: var(--terminal-dark);
   }
 
-  .bg-electric-blue {
-    background-color: var(--electric-blue);
+  .bg-pip-green {
+    background-color: var(--pip-green);
   }
 
-  .bg-hot-pink {
-    background-color: var(--hot-pink);
+  .bg-pip-amber {
+    background-color: var(--pip-amber);
   }
 
-  .bg-dark-navy {
-    background-color: var(--dark-navy);
+  .border-terminal-green {
+    border-color: var(--terminal-green);
   }
 
-  .bg-dark-gray {
-    background-color: var(--dark-gray);
+  .border-terminal-header {
+    border-color: var(--terminal-header);
   }
 
-  .border-neon-green {
-    border-color: var(--neon-green);
+  .border-pip-amber {
+    border-color: var(--pip-amber);
   }
 
-  .border-electric-blue {
-    border-color: var(--electric-blue);
-  }
-
-  .border-hot-pink {
-    border-color: var(--hot-pink);
-  }
-
-  /* Scanlines effect */
+  /* Terminal scanlines effect */
   .scanlines::before {
     content: "";
     position: fixed;
@@ -95,39 +97,47 @@
     height: 100%;
     background: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0) 50%,
-      rgba(0, 0, 0, 0.1) 50%
+      rgba(88, 214, 141, 0) 50%,
+      rgba(88, 214, 141, 0.04) 50%
     );
-    background-size: 100% 4px;
+    background-size: 100% 2px;
     z-index: 40;
     pointer-events: none;
-    opacity: 0.2;
+    opacity: 0.5;
   }
   
-  /* Pixel border effect */
-  .pixel-border {
-    box-shadow: 
-      -3px 0 0 0 var(--neon-green),
-      3px 0 0 0 var(--neon-green),
-      0 -3px 0 0 var(--neon-green),
-      0 3px 0 0 var(--neon-green);
+  /* Terminal border effect */
+  .terminal-border {
+    border: 2px solid var(--terminal-green);
+    box-shadow: 0 0 8px var(--terminal-green);
   }
   
-  /* CRT flicker effect */
-  .crt-flicker {
-    animation: flicker 0.15s infinite;
+  /* RobCo terminal flicker effect */
+  .terminal-flicker {
+    animation: flicker 0.8s infinite;
   }
   
-  /* Screen glow effect */
-  .screen-glow {
-    box-shadow: 0 0 12px var(--neon-green), 0 0 20px var(--neon-green);
+  /* Terminal screen glow effect */
+  .terminal-glow {
+    box-shadow: 0 0 10px var(--terminal-green), 0 0 15px var(--terminal-green);
   }
   
-  /* Grid background */
-  .grid-bg {
-    background-image: linear-gradient(#1a1a1a 1px, transparent 1px),
-                      linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
-    background-size: 20px 20px;
+  /* RobCo header bar */
+  .robco-header {
+    background-color: var(--terminal-dark);
+    border-bottom: 1px solid var(--terminal-green);
+    font-family: 'VT323', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 16px;
+  }
+  
+  /* PIP-Boy style container */
+  .pip-container {
+    border: 3px solid var(--pip-green);
+    background-color: var(--terminal-dark);
+    box-shadow: inset 0 0 20px rgba(46, 204, 113, 0.1);
+    border-radius: 2px;
   }
   
   /* Typing animation */
@@ -138,9 +148,56 @@
               blink-caret .75s step-end infinite;
   }
   
+  /* Terminal text styles */
+  .terminal-text {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--terminal-green);
+  }
+
+  .terminal-title {
+    font-family: 'VT323', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--terminal-header);
+  }
+
+  .terminal-prompt::before {
+    content: "> ";
+    color: var(--terminal-header);
+  }
+
+  .terminal-section {
+    border-top: 1px solid var(--terminal-green);
+    border-bottom: 1px solid var(--terminal-green);
+    padding: 10px 0;
+    margin: 20px 0;
+  }
+
+  .terminal-list-item {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+
+  .terminal-list-item::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: var(--terminal-header);
+  }
+
+  /* Animations */
   @keyframes flicker {
-    0% { opacity: 0.9; }
-    100% { opacity: 1; }
+    0% { opacity: 0.97; }
+    5% { opacity: 0.90; }
+    10% { opacity: 0.97; }
+    15% { opacity: 0.94; }
+    20% { opacity: 0.98; }
+    50% { opacity: 0.95; }
+    80% { opacity: 0.98; }
+    85% { opacity: 0.91; }
+    95% { opacity: 0.98; }
+    100% { opacity: 0.95; }
   }
   
   @keyframes typing {
@@ -150,37 +207,38 @@
   
   @keyframes blink-caret {
     from, to { border-color: transparent }
-    50% { border-color: var(--neon-green); }
+    50% { border-color: var(--terminal-green); }
   }
 
-  @keyframes glitch {
-    0% { transform: translate(0); }
-    20% { transform: translate(-5px, 5px); }
-    40% { transform: translate(-5px, -5px); }
-    60% { transform: translate(5px, 5px); }
-    80% { transform: translate(5px, -5px); }
-    100% { transform: translate(0); }
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
   }
 
-  @keyframes scanline {
-    0% { transform: translateY(0%); }
-    100% { transform: translateY(100%); }
+  @keyframes terminal-boot {
+    0% { height: 0; opacity: 0; }
+    30% { height: 100%; opacity: 0.3; }
+    100% { height: 100%; opacity: 1; }
   }
 
-  @keyframes blink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
+  /* Animation classes */
+  .animate-terminal-flicker {
+    animation: flicker 2s infinite;
   }
 
-  .animate-glitch {
-    animation: glitch 1s infinite;
+  .animate-cursor-blink {
+    animation: cursor-blink 1s infinite;
   }
 
-  .animate-scanline {
-    animation: scanline 8s linear infinite;
+  .animate-terminal-boot {
+    animation: terminal-boot 1.5s ease-out forwards;
   }
 
-  .animate-blink {
-    animation: blink 1.2s infinite;
+  .animate-typing {
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: 1px;
+    animation: typing 3.5s steps(40, end);
   }
 }
