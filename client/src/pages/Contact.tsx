@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { apiRequest } from '@/lib/queryClient';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
@@ -11,32 +11,76 @@ const Contact = () => {
     email: '',
     message: ''
   });
+  const [terminalLines, setTerminalLines] = useState<string[]>([]);
+  const [terminalReady, setTerminalReady] = useState(false);
+
+  useEffect(() => {
+    // Simulation de démarrage d'un terminal pour la page de contact
+    const startupLines = [
+      "ROBCO INDUSTRIES (TM) TERMINAL",
+      "INITIALISATION DU MODULE DE COMMUNICATION...",
+      "FRÉQUENCES RADIO OUVERTES",
+      "CRYPTAGE ACTIVÉ",
+      "SYSTÈME DE MESSAGERIE PRÊT",
+      "EN ATTENTE DE TRANSMISSION..."
+    ];
+
+    let lineIndex = 0;
+    const terminalBootInterval = setInterval(() => {
+      if (lineIndex < startupLines.length) {
+        setTerminalLines(prev => [...prev, startupLines[lineIndex]]);
+        lineIndex++;
+
+        if (lineIndex === startupLines.length) {
+          clearInterval(terminalBootInterval);
+          setTimeout(() => {
+            setTerminalReady(true);
+          }, 800);
+        }
+      }
+    }, 400);
+
+    return () => clearInterval(terminalBootInterval);
+  }, []);
 
   const contactMutation = useMutation({
     mutationFn: async (data: ContactFormData) => {
+      // Simulation de transmission
+      await new Promise(resolve => setTimeout(resolve, 1500));
       const response = await apiRequest('POST', '/api/contact', data);
       const result = await response.json();
       return result;
     },
     onSuccess: (data) => {
       toast({
-        title: "Message Sent",
-        description: data.message,
+        title: "TRANSMISSION RÉUSSIE",
+        description: "Message envoyé avec succès. Nous vous répondrons dans les plus brefs délais.",
         variant: "default",
       });
       setFormData({ name: '', email: '', message: '' });
+      setTerminalLines(prev => [...prev, "TRANSMISSION TERMINÉE", "CONNEXION FERMÉE"]);
+      setTimeout(() => {
+        setTerminalLines([]);
+        setTerminalReady(false);
+        setTimeout(() => {
+          setTerminalLines(["ROBCO INDUSTRIES (TM) TERMINAL", "SYSTÈME DE MESSAGERIE PRÊT", "EN ATTENTE DE NOUVELLE TRANSMISSION..."]);
+          setTerminalReady(true);
+        }, 1000);
+      }, 3000);
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send message",
+        title: "ERREUR DE TRANSMISSION",
+        description: error instanceof Error ? error.message : "Échec de l'envoi du message. Veuillez réessayer.",
         variant: "destructive",
       });
+      setTerminalLines(prev => [...prev, "ERREUR: TRANSMISSION ÉCHOUÉE", "VÉRIFIEZ LA CONNEXION ET RÉESSAYEZ"]);
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setTerminalLines(prev => [...prev, "INITIALISATION DE LA TRANSMISSION...", "ENVOI EN COURS..."]);
     contactMutation.mutate(formData);
   };
 
@@ -46,68 +90,80 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 relative overflow-hidden">
+    <section id="contact" className="py-10 px-4 relative overflow-hidden bg-terminal-bg min-h-screen scanlines">
       <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-12">
-          <h2 className="font-pixel text-4xl md:text-5xl text-neon-green inline-block border-b-4 border-hot-pink pb-2">
-            ESTABLISH_CONNECTION
+        <div className="robco-header mb-8">
+          <h2 className="font-robco text-3xl md:text-4xl text-terminal-header pb-2 uppercase">
+            ÉTABLIR UNE CONNEXION
           </h2>
+          <div className="w-full border-b border-terminal-green mt-2"></div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-dark-gray p-6 border-2 border-electric-blue">
-            <h3 className="font-pixel text-2xl text-electric-blue mb-4">CONTACT_INFO</h3>
+          {/* Section Informations de contact */}
+          <div className="bg-terminal-dark p-5 border border-terminal-green terminal-border">
+            <h3 className="font-robco text-xl text-pip-green mb-4 uppercase">Informations de contact</h3>
             
-            <ul className="space-y-4 font-code">
-              <li className="flex items-center">
-                <div className="w-8 h-8 bg-neon-green flex items-center justify-center mr-3">
-                  <span className="text-dark-navy font-bold">@</span>
-                </div>
-                <a href="mailto:hello@retroportfolio.dev" className="text-light-gray hover:text-hot-pink transition-colors">hello@retroportfolio.dev</a>
-              </li>
-              <li className="flex items-center">
-                <div className="w-8 h-8 bg-neon-green flex items-center justify-center mr-3">
-                  <span className="text-dark-navy font-bold">#</span>
-                </div>
-                <span className="text-light-gray">+1 (800) 555-1234</span>
-              </li>
-              <li className="flex items-center">
-                <div className="w-8 h-8 bg-neon-green flex items-center justify-center mr-3">
-                  <span className="text-dark-navy font-bold">!</span>
-                </div>
-                <span className="text-light-gray">Cyberpunk City, Digital District</span>
-              </li>
-            </ul>
-            
-            <div className="mt-8">
-              <h3 className="font-pixel text-2xl text-electric-blue mb-4">SOCIAL_NETWORKS</h3>
-              <div className="flex space-x-4">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-dark-navy border-2 border-electric-blue flex items-center justify-center text-electric-blue hover:bg-electric-blue hover:text-dark-navy transition-colors">
-                  <span className="font-pixel text-lg">GH</span>
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-dark-navy border-2 border-electric-blue flex items-center justify-center text-electric-blue hover:bg-electric-blue hover:text-dark-navy transition-colors">
-                  <span className="font-pixel text-lg">TW</span>
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-dark-navy border-2 border-electric-blue flex items-center justify-center text-electric-blue hover:bg-electric-blue hover:text-dark-navy transition-colors">
-                  <span className="font-pixel text-lg">LI</span>
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-dark-navy border-2 border-electric-blue flex items-center justify-center text-electric-blue hover:bg-electric-blue hover:text-dark-navy transition-colors">
-                  <span className="font-pixel text-lg">IG</span>
-                </a>
+            {!terminalReady ? (
+              <div className="bg-terminal-bg border border-terminal-green p-4 h-80 overflow-y-auto font-terminal text-terminal-green">
+                {terminalLines.map((line, index) => (
+                  <div key={index} className="mb-1">
+                    {index > 0 && <span className="text-pip-amber">{'>'}</span>} {line}
+                  </div>
+                ))}
+                <span className="animate-cursor-blink">▓</span>
               </div>
-            </div>
+            ) : (
+              <>
+                <ul className="space-y-4 font-terminal text-terminal-green">
+                  <li className="flex items-center terminal-list-item">
+                    <div className="inline-block bg-terminal-green w-6 h-6 flex items-center justify-center mr-3 text-terminal-bg">
+                      @
+                    </div>
+                    <a href="mailto:adrien.tripon@example.com" className="text-terminal-text hover:text-pip-green transition-colors">
+                      adrien.tripon@example.com
+                    </a>
+                  </li>
+                  <li className="flex items-center terminal-list-item">
+                    <div className="inline-block bg-terminal-green w-6 h-6 flex items-center justify-center mr-3 text-terminal-bg">
+                      #
+                    </div>
+                    <span className="text-terminal-text">+33 6 XX XX XX XX</span>
+                  </li>
+                  <li className="flex items-center terminal-list-item">
+                    <div className="inline-block bg-terminal-green w-6 h-6 flex items-center justify-center mr-3 text-terminal-bg">
+                      !
+                    </div>
+                    <span className="text-terminal-text">Paris, France</span>
+                  </li>
+                </ul>
+                
+                <div className="mt-8 pt-4 border-t border-terminal-green/30">
+                  <h3 className="font-robco text-lg text-pip-green mb-4 uppercase">Réseaux Professionnels</h3>
+                  <div className="flex space-x-4">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-terminal-bg border border-terminal-green text-terminal-green hover:text-pip-green hover:border-pip-green transition-colors">
+                      <span className="font-terminal">[GitHub]</span>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-terminal-bg border border-terminal-green text-terminal-green hover:text-pip-green hover:border-pip-green transition-colors">
+                      <span className="font-terminal">[LinkedIn]</span>
+                    </a>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           
-          <div className="bg-dark-gray p-6 border-2 border-neon-green">
-            <h3 className="font-pixel text-2xl text-neon-green mb-4">SEND_MESSAGE</h3>
+          {/* Section Formulaire de contact */}
+          <div className="bg-terminal-dark p-5 border border-terminal-green">
+            <h3 className="font-robco text-xl text-terminal-header mb-4 uppercase">Transmettre un message</h3>
             
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name" className="block font-retro text-xs text-electric-blue mb-1">[NAME]</label>
+                <label htmlFor="name" className="block font-terminal text-xs text-terminal-green mb-1">[NOM]</label>
                 <input 
                   type="text" 
                   id="name" 
-                  className="w-full bg-dark-navy border-2 border-electric-blue px-4 py-2 font-code text-light-gray focus:border-hot-pink focus:outline-none"
+                  className="w-full bg-terminal-bg border border-terminal-green px-4 py-2 font-terminal text-terminal-text focus:border-pip-green focus:outline-none"
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -115,11 +171,11 @@ const Contact = () => {
               </div>
               
               <div>
-                <label htmlFor="email" className="block font-retro text-xs text-electric-blue mb-1">[EMAIL]</label>
+                <label htmlFor="email" className="block font-terminal text-xs text-terminal-green mb-1">[EMAIL]</label>
                 <input 
                   type="email" 
                   id="email" 
-                  className="w-full bg-dark-navy border-2 border-electric-blue px-4 py-2 font-code text-light-gray focus:border-hot-pink focus:outline-none"
+                  className="w-full bg-terminal-bg border border-terminal-green px-4 py-2 font-terminal text-terminal-text focus:border-pip-green focus:outline-none"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -127,11 +183,11 @@ const Contact = () => {
               </div>
               
               <div>
-                <label htmlFor="message" className="block font-retro text-xs text-electric-blue mb-1">[MESSAGE]</label>
+                <label htmlFor="message" className="block font-terminal text-xs text-terminal-green mb-1">[MESSAGE]</label>
                 <textarea 
                   id="message" 
-                  rows={4}
-                  className="w-full bg-dark-navy border-2 border-electric-blue px-4 py-2 font-code text-light-gray focus:border-hot-pink focus:outline-none resize-none"
+                  rows={6}
+                  className="w-full bg-terminal-bg border border-terminal-green px-4 py-2 font-terminal text-terminal-text focus:border-pip-green focus:outline-none resize-none"
                   value={formData.message}
                   onChange={handleChange}
                   required
@@ -140,12 +196,24 @@ const Contact = () => {
               
               <button 
                 type="submit" 
-                className="font-retro text-sm bg-dark-navy border-2 border-neon-green text-neon-green px-6 py-3 hover:bg-neon-green hover:text-dark-navy transition-colors duration-300 w-full"
+                className="font-terminal text-sm bg-terminal-bg border border-terminal-green text-terminal-green px-6 py-3 hover:text-pip-green hover:border-pip-green transition-colors duration-300 w-full"
                 disabled={contactMutation.isPending}
               >
-                {contactMutation.isPending ? 'SENDING...' : 'TRANSMIT_MESSAGE'}
+                {contactMutation.isPending ? 'TRANSMISSION EN COURS...' : 'ENVOYER LE MESSAGE'}
+                {!contactMutation.isPending && <span className="ml-2 animate-cursor-blink">▓</span>}
               </button>
             </form>
+
+            <div className="mt-6 pt-4 border-t border-terminal-green/30">
+              <div className="font-terminal text-xs text-terminal-green opacity-70 flex justify-between">
+                <div>
+                  ÉTAT DU SYSTÈME: <span className="text-pip-green">OPÉRATIONNEL</span>
+                </div>
+                <div>
+                  <span className="text-terminal-header">ROBCO COMM V2.5</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

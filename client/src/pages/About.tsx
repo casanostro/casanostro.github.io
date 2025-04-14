@@ -1,95 +1,168 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const About = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('supply-chain');
+  const [animateList, setAnimateList] = useState(true);
+
   useEffect(() => {
-    // Typing effect function
-    const typeElements = document.querySelectorAll('.typing-animation');
-    
-    typeElements.forEach(el => {
-      const text = el.textContent || '';
-      el.textContent = '';
-      let i = 0;
-      
-      const typeWriter = () => {
-        if (i < text.length) {
-          el.textContent += text.charAt(i);
-          i++;
-          setTimeout(typeWriter, Math.random() * 50 + 50);
-        }
-      };
-      
-      // Start typing when element is in viewport
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setTimeout(typeWriter, 500);
-            observer.unobserve(entry.target);
-          }
-        });
-      });
-      
-      observer.observe(el);
-    });
-  }, []);
+    // Animation pour la liste sélectionnée
+    setAnimateList(false);
+    setTimeout(() => {
+      setAnimateList(true);
+    }, 100);
+  }, [selectedCategory]);
+
+  // Types pour les catégories de compétences
+  type SkillCategory = {
+    title: string;
+    skills: string[];
+  };
+
+  type SkillCategories = {
+    [key: string]: SkillCategory;
+  };
+
+  // Création des compétences à partir du CV
+  const skillCategories: SkillCategories = {
+    'supply-chain': {
+      title: 'SUPPLY CHAIN',
+      skills: [
+        'S&OP', 'WMS', 'TMS', 'GPAO', 'MRP2', 'DDMRP', 
+        'PDP', 'Gestion des stocks', 'Approvisionnements', 
+        'Optimisation des flux logistiques'
+      ]
+    },
+    'systemes': {
+      title: 'SYSTÈMES INFO',
+      skills: [
+        'SAP', 'Oracle M3', 'Power BI', 'SQL', 
+        'Python (pandas, numpy)', 'Excel VBA', 
+        'Power Query', 'Office Suite', 
+        'Outils de modélisation et simulation'
+      ]
+    },
+    'methodologies': {
+      title: 'MÉTHODOLOGIES',
+      skills: [
+        'Lean Six Sigma', 'Risk Management', 
+        'Gestion des risques', 'Scrum', 'Kanban', 
+        'Amélioration continue', 'Audit des processus', 
+        'MS Project'
+      ]
+    },
+    'analytiques': {
+      title: 'ANALYTIQUES',
+      skills: [
+        'Analyse de données', 'Data mining', 
+        'Statistiques appliquées', 'Modélisation des processus', 
+        'Cartographie des flux', 'Optimisation des coûts'
+      ]
+    },
+    'transverses': {
+      title: 'TRANSVERSES',
+      skills: [
+        'Gestion du changement', 'Collaboration interservices', 
+        'Prise de décision rapide', 'Adaptabilité', 
+        'Communication efficace', 'Leadership', 
+        'Management d\'équipe'
+      ]
+    },
+    'langues': {
+      title: 'LANGUES',
+      skills: [
+        'Français (Langue maternelle)', 
+        'Anglais (B2+ / TOEIC 850)', 
+        'Espagnol (C1 / DELE)'
+      ]
+    }
+  };
 
   return (
-    <section id="about" className="py-20 px-4 relative overflow-hidden grid-bg">
+    <section id="about" className="py-12 px-4 relative overflow-hidden bg-terminal-bg min-h-screen scanlines">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="order-2 lg:order-1">
-            <div className="bg-dark-gray p-6 border-2 border-neon-green relative screen-glow">
-              <h2 className="font-pixel text-4xl text-electric-blue mb-6">
-                <span className="text-hot-pink">&gt;</span> SYS_INFO
-              </h2>
-              
-              <div className="space-y-4 font-code text-light-gray">
-                <p className="typing-animation">
-                  <span className="text-neon-green">$</span> Full-stack developer with 5+ years experience specializing in creating interactive web applications with distinctive visual aesthetics.
-                </p>
-                
-                <p>
-                  <span className="text-neon-green">$</span> Tech stack includes HTML5, CSS3, JavaScript (ES6+), Node.js, Express, MongoDB, and various frontend frameworks.
-                </p>
-                
-                <p>
-                  <span className="text-neon-green">$</span> Passionate about the intersection of retro computing aesthetics and modern web technologies. 
-                </p>
-                
-                <p>
-                  <span className="text-neon-green">$</span> Background in digital art and computer science provides unique perspective on UX/UI design.
-                </p>
-              </div>
-              
-              <div className="mt-8 pt-4 border-t border-gray-700">
-                <h3 className="font-pixel text-2xl text-electric-blue mb-4">TECH_SKILLS</h3>
-                <div className="flex flex-wrap gap-3">
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">JavaScript</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">React.js</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">Node.js</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">Express.js</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">MongoDB</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">CSS/SCSS</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">WebGL</div>
-                  <div className="bg-dark-navy px-3 py-1 text-neon-green border border-neon-green text-sm font-code">Three.js</div>
+        <div className="robco-header mb-8">
+          <h2 className="font-robco text-3xl md:text-4xl text-terminal-header pb-2 uppercase">
+            COMPÉTENCES TECHNIQUES
+          </h2>
+          <div className="w-full border-b border-terminal-green mt-2"></div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+          {/* Section de navigation des compétences */}
+          <div className="lg:col-span-1">
+            <div className="bg-terminal-dark border border-terminal-green p-4 terminal-border">
+              <h3 className="font-terminal text-terminal-header text-xl mb-4 uppercase">CATÉGORIES</h3>
+              <ul className="space-y-2">
+                {Object.entries(skillCategories).map(([key, category]) => (
+                  <li 
+                    key={key}
+                    className={`cursor-pointer font-terminal text-sm terminal-list-item ${selectedCategory === key ? 'text-pip-green' : 'text-terminal-green'}`}
+                    onClick={() => setSelectedCategory(key)}
+                  >
+                    {category.title}
+                    {selectedCategory === key && <span className="ml-2 animate-cursor-blink">▓</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-6 bg-terminal-dark border border-terminal-green p-4">
+              <h3 className="font-terminal text-terminal-header text-xl mb-4 uppercase">FORMATION</h3>
+              <div className="font-terminal text-terminal-green text-sm">
+                <div className="terminal-list-item mb-4">
+                  <span className="text-pip-amber">Master Supply Chain</span>
+                  <div className="ml-4 mt-1 text-terminal-text opacity-90">
+                    <div>PPA, Paris, France</div>
+                    <div>2022 - 2024</div>
+                  </div>
+                </div>
+                <div className="terminal-prompt text-xs mt-4 opacity-80">
+                  {'> Spécialisation : Optimisation des processus logistiques & Supply Chain Management'}
+                </div>
+                <div className="terminal-prompt text-xs mt-2 opacity-80">
+                  {'> Mémoire : Vers une renaissance industrielle - Enjeux et solutions pour l\'industrie française'}
                 </div>
               </div>
             </div>
           </div>
-          
-          <div className="order-1 lg:order-2 text-center lg:text-right">
-            <div className="relative inline-block">
-              <div className="border-8 border-neon-green inline-block relative screen-glow">
-                <div className="aspect-w-4 aspect-h-5 w-60 md:w-80 mx-auto">
-                  <img 
-                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&h=500&fit=crop" 
-                    alt="Developer Portrait" 
-                    className="object-cover w-full h-full"
-                  />
-                  <div className="absolute inset-0 bg-electric-blue/10"></div>
-                </div>
+
+          {/* Section d'affichage des compétences */}
+          <div className="lg:col-span-2 bg-terminal-dark border border-terminal-green p-6 terminal-flicker">
+            <div className="mb-4 flex justify-between items-center">
+              <h3 className="font-robco text-2xl text-pip-green uppercase">
+                {skillCategories[selectedCategory].title}
+              </h3>
+              <div className="font-terminal text-xs text-terminal-green">
+                <span className="mr-2">STATUS:</span>
+                <span className="text-pip-green">ACTIF</span>
               </div>
-              <div className="absolute -bottom-4 -left-4 bg-dark-gray px-3 py-1 border-2 border-hot-pink">
-                <span className="font-pixel text-hot-pink text-xl">DEV_PROFILE</span>
+            </div>
+
+            <div className="border-b border-terminal-green/30 mb-4"></div>
+            
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 transition-opacity duration-300 ${animateList ? 'opacity-100' : 'opacity-0'}`}>
+              {skillCategories[selectedCategory].skills.map((skill: string, index: number) => (
+                <div 
+                  key={index} 
+                  className="bg-terminal-bg px-3 py-2 border border-terminal-green/50 text-terminal-green text-sm font-terminal hover:border-pip-green hover:text-pip-green transition-colors duration-200"
+                >
+                  <span className="text-pip-amber mr-2">[{index + 1}]</span>
+                  {skill}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-terminal-green/30">
+              <div className="font-terminal text-xs text-terminal-text opacity-80 flex justify-between">
+                <div>
+                  <div className="terminal-prompt mb-2">
+                    Master Supply Chain & expérience opérationnelle dans les secteurs Aéronautique, Défense, Luxe et Sidérurgie
+                  </div>
+                  <div className="terminal-prompt">
+                    Complément de formation en Data Analytics (Power BI, SQL) pour l'optimisation des processus logistiques
+                  </div>
+                </div>
+                <div className="animate-cursor-blink">▓</div>
               </div>
             </div>
           </div>
