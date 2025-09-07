@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const journalList = document.getElementById('journal-list');
   const achievementForm = document.getElementById('achievement-form');
   const journalForm = document.getElementById('journal-form');
+
   const gridArt = document.getElementById('grid-art');
 
   const colors = ['#ff0054', '#00bbf9', '#00f5d4', '#f15bb5', '#fee440'];
@@ -12,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cell.style.background = colors[Math.floor(Math.random() * colors.length)];
     gridArt.appendChild(cell);
   }
+=======
+
 
   function loadEntries(key, list) {
     const items = JSON.parse(localStorage.getItem(key) || '[]');
