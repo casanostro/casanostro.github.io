@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="grid-art" aria-hidden="true"></div>
+  <header>
+    <h1>Mon Portfolio</h1>
+    <nav>
+      <a href="#achievements">Achievements</a>
+      <a href="#journal">Journal</a>
+    </nav>
+  </header>
+  <main>
+    <section id="achievements">
+      <h2>Achievements</h2>
+      <ul id="achievements-list"></ul>
+      <form id="achievement-form">
+        <input type="text" id="achievement-input" placeholder="Nouvelle réalisation" required />
+        <button type="submit">Ajouter</button>
+      </form>
+    </section>
+    <section id="journal">
+      <h2>Journal de Bord</h2>
+      <ul id="journal-list"></ul>
+      <form id="journal-form">
+        <input type="text" id="journal-input" placeholder="Nouvelle entrée" required />
+        <button type="submit">Ajouter</button>
+      </form>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2024 Mon Nom</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
