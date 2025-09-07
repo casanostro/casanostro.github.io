@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const achievementForm = document.getElementById('achievement-form');
   const journalForm = document.getElementById('journal-form');
 
+  const gridArt = document.getElementById('grid-art');
+
+  const colors = ['#ff0054', '#00bbf9', '#00f5d4', '#f15bb5', '#fee440'];
+  for (let i = 0; i < 60; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'module';
+    cell.style.background = colors[Math.floor(Math.random() * colors.length)];
+    gridArt.appendChild(cell);
+  }
+=======
+
+
   function loadEntries(key, list) {
     const items = JSON.parse(localStorage.getItem(key) || '[]');
     list.innerHTML = '';
