@@ -3,512 +3,426 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Adrien Tripon - Chef de Projet Supply Chain & SI. Spécialiste intégration WMS/ERP, optimisation des flux logistiques et orchestration de systèmes." />
-  <meta name="keywords" content="Supply Chain, Chef de Projet, WMS, ERP, SAP, Logistique, SI" />
-  <meta name="author" content="Adrien Tripon" />
-  <title>Adrien Tripon | Chef de Projet Supply Chain & SI</title>
+  <meta name="description" content="NEXUS Supply Chain - Real-time Operations Dashboard" />
+  <title>NEXUS | Supply Chain Command Center</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-  <!-- Animated background -->
-  <div class="flow-background" aria-hidden="true">
-    <div class="flow-line"></div>
-    <div class="flow-line"></div>
-    <div class="flow-line"></div>
-    <div class="flow-line"></div>
-    <div class="flow-line"></div>
+  <!-- Scanlines overlay -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Grid background -->
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <!-- Main Container -->
+  <div class="dashboard">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo glitch" data-text="NEXUS">
+          <span class="logo-icon">◈</span>
+          NEXUS
+        </div>
+        <span class="logo-subtitle">SUPPLY CHAIN COMMAND CENTER</span>
+      </div>
+      <div class="header-center">
+        <div class="status-bar">
+          <span class="status-item online">
+            <span class="status-dot"></span>
+            SYSTEM ONLINE
+          </span>
+          <span class="status-item">
+            <span class="status-icon">◉</span>
+            <span id="active-connections">6</span> NODES ACTIVE
+          </span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-btn" id="import-btn" title="Import Data">
+          <span class="btn-icon">⬆</span>
+          <span class="btn-text">IMPORT</span>
+        </button>
+        <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden />
+        <div class="notifications" id="notifications-btn">
+          <span class="notif-icon">🔔</span>
+          <span class="notif-badge" id="notif-count">3</span>
+        </div>
+        <div class="datetime">
+          <div class="date" id="current-date">25/12/2024</div>
+          <div class="time" id="current-time">14:32:00</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Global KPIs -->
+    <section class="global-kpis">
+      <div class="section-header">
+        <span class="section-tag">◢ GLOBAL METRICS ◣</span>
+      </div>
+      <div class="kpis-row">
+        <div class="kpi-card" data-status="good">
+          <div class="kpi-icon">◎</div>
+          <div class="kpi-value" id="kpi-otif">94.2<span class="kpi-unit">%</span></div>
+          <div class="kpi-label">OTIF RATE</div>
+          <div class="kpi-trend up">▲ +2.1%</div>
+          <div class="kpi-spark" id="spark-otif"></div>
+        </div>
+        <div class="kpi-card" data-status="good">
+          <div class="kpi-icon">◈</div>
+          <div class="kpi-value" id="kpi-flux">12.4<span class="kpi-unit">M€</span></div>
+          <div class="kpi-label">WEEKLY FLOW</div>
+          <div class="kpi-trend up">▲ +5.3%</div>
+          <div class="kpi-spark" id="spark-flux"></div>
+        </div>
+        <div class="kpi-card" data-status="warning">
+          <div class="kpi-icon">◇</div>
+          <div class="kpi-value" id="kpi-orders">847</div>
+          <div class="kpi-label">ACTIVE ORDERS</div>
+          <div class="kpi-trend down">▼ -12</div>
+          <div class="kpi-spark" id="spark-orders"></div>
+        </div>
+        <div class="kpi-card" data-status="good">
+          <div class="kpi-icon">◆</div>
+          <div class="kpi-value" id="kpi-service">98.1<span class="kpi-unit">%</span></div>
+          <div class="kpi-label">SERVICE RATE</div>
+          <div class="kpi-trend up">▲ +0.8%</div>
+          <div class="kpi-spark" id="spark-service"></div>
+        </div>
+        <div class="kpi-card" data-status="good">
+          <div class="kpi-icon">◐</div>
+          <div class="kpi-value" id="kpi-costs">-18<span class="kpi-unit">%</span></div>
+          <div class="kpi-label">COST DELTA</div>
+          <div class="kpi-trend up">▲ vs LY</div>
+          <div class="kpi-spark" id="spark-costs"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <section class="main-grid">
+
+      <!-- AMONT -->
+      <div class="panel panel-amont">
+        <div class="panel-header">
+          <span class="panel-icon">▼</span>
+          <h2 class="panel-title">AMONT</h2>
+          <span class="panel-subtitle">Upstream Operations</span>
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">Lead Time</span>
+            <span class="metric-value" id="amont-leadtime">4.2j</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">Supplier Performance</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="amont-progress" style="width: 82%"></div>
+              <span class="progress-value">82%</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">In Transit</span>
+            <span class="metric-value highlight" id="amont-transit">234</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Pending Orders</span>
+            <span class="metric-value" id="amont-pending">89</span>
+          </div>
+          <div class="mini-chart">
+            <canvas id="chart-amont"></canvas>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="update-time">Updated 2min ago</span>
+        </div>
+      </div>
+
+      <!-- AVAL -->
+      <div class="panel panel-aval">
+        <div class="panel-header">
+          <span class="panel-icon">▲</span>
+          <h2 class="panel-title">AVAL</h2>
+          <span class="panel-subtitle">Downstream Distribution</span>
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">OTIF Rate</span>
+            <span class="metric-value good" id="aval-otif">94.2%</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">Delivery Performance</div>
+            <div class="progress-bar">
+              <div class="progress-fill cyan" id="aval-progress" style="width: 87%"></div>
+              <span class="progress-value">87%</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Backlog</span>
+            <span class="metric-value warning" id="aval-backlog">156</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Today's Shipments</span>
+            <span class="metric-value" id="aval-shipments">312</span>
+          </div>
+          <div class="mini-chart">
+            <canvas id="chart-aval"></canvas>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="update-time">Updated 1min ago</span>
+        </div>
+      </div>
+
+      <!-- APPRO -->
+      <div class="panel panel-appro">
+        <div class="panel-header">
+          <span class="panel-icon">◆</span>
+          <h2 class="panel-title">APPRO</h2>
+          <span class="panel-subtitle">Procurement & Stock</span>
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">Coverage</span>
+            <span class="metric-value" id="appro-coverage">18j</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">Stock Level</div>
+            <div class="progress-bar">
+              <div class="progress-fill magenta" id="appro-progress" style="width: 64%"></div>
+              <span class="progress-value">64%</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Stockouts</span>
+            <span class="metric-value danger" id="appro-stockouts">12</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Reorder Queue</span>
+            <span class="metric-value" id="appro-reorder">47</span>
+          </div>
+          <div class="mini-chart">
+            <canvas id="chart-appro"></canvas>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="update-time">Updated 3min ago</span>
+        </div>
+      </div>
+
+      <!-- LOGISTIQUE -->
+      <div class="panel panel-logistique">
+        <div class="panel-header">
+          <span class="panel-icon">⚡</span>
+          <h2 class="panel-title">LOGISTIQUE</h2>
+          <span class="panel-subtitle">Transport & Warehousing</span>
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">Fill Rate</span>
+            <span class="metric-value good" id="log-fillrate">91%</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">Fleet Utilization</div>
+            <div class="progress-bar">
+              <div class="progress-fill green" id="log-progress" style="width: 91%"></div>
+              <span class="progress-value">91%</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Transport Cost</span>
+            <span class="metric-value" id="log-cost">234K€</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Active Trucks</span>
+            <span class="metric-value highlight" id="log-trucks">47</span>
+          </div>
+          <div class="mini-chart">
+            <canvas id="chart-logistique"></canvas>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="update-time">Updated 30s ago</span>
+        </div>
+      </div>
+
+      <!-- DWH -->
+      <div class="panel panel-dwh">
+        <div class="panel-header">
+          <span class="panel-icon">💾</span>
+          <h2 class="panel-title">DWH</h2>
+          <span class="panel-subtitle">Data Warehouse</span>
+        </div>
+        <div class="panel-content">
+          <div class="metric-row">
+            <span class="metric-label">Uptime</span>
+            <span class="metric-value good" id="dwh-uptime">99.2%</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">Storage Used</div>
+            <div class="progress-bar">
+              <div class="progress-fill cyan" id="dwh-progress" style="width: 68%"></div>
+              <span class="progress-value">2.4TB</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">ETL Jobs</span>
+            <span class="metric-value" id="dwh-jobs">142<span class="metric-sub">/145</span></span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Failed Jobs</span>
+            <span class="metric-value warning" id="dwh-failed">3</span>
+          </div>
+          <div class="mini-chart">
+            <canvas id="chart-dwh"></canvas>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="update-time">Live sync</span>
+        </div>
+      </div>
+
+      <!-- DTD -->
+      <div class="panel panel-dtd">
+        <div class="panel-header">
+          <span class="panel-icon">🎯</span>
+          <h2 class="panel-title">DTD</h2>
+          <span class="panel-subtitle">Data To Decision</span>
+        </div>
+        <div class="panel-content">
+          <div class="alerts-summary">
+            <div class="alert-item critical">
+              <span class="alert-icon">▲</span>
+              <span class="alert-count" id="dtd-critical">1</span>
+              <span class="alert-label">Critical</span>
+            </div>
+            <div class="alert-item warning">
+              <span class="alert-icon">●</span>
+              <span class="alert-count" id="dtd-warning">2</span>
+              <span class="alert-label">Warning</span>
+            </div>
+            <div class="alert-item info">
+              <span class="alert-icon">◆</span>
+              <span class="alert-count" id="dtd-info">5</span>
+              <span class="alert-label">Info</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Models Active</span>
+            <span class="metric-value" id="dtd-models">8</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Predictions/Day</span>
+            <span class="metric-value highlight" id="dtd-predictions">1.2K</span>
+          </div>
+          <div class="mini-chart">
+            <canvas id="chart-dtd"></canvas>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span class="update-time">AI-Powered</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Trend Chart -->
+    <section class="trend-section">
+      <div class="panel panel-wide">
+        <div class="panel-header">
+          <span class="panel-icon">📈</span>
+          <h2 class="panel-title">PERFORMANCE TREND</h2>
+          <div class="chart-controls">
+            <button class="chart-btn active" data-period="week">7D</button>
+            <button class="chart-btn" data-period="month">30D</button>
+            <button class="chart-btn" data-period="quarter">90D</button>
+            <button class="chart-btn" data-period="year">1Y</button>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="trend-chart">
+            <canvas id="chart-trend"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alerts Feed -->
+    <section class="alerts-section">
+      <div class="panel panel-wide">
+        <div class="panel-header">
+          <span class="panel-icon">⚠</span>
+          <h2 class="panel-title">LIVE ALERTS FEED</h2>
+          <div class="alerts-filter">
+            <button class="filter-btn active" data-filter="all">ALL</button>
+            <button class="filter-btn" data-filter="critical">CRITICAL</button>
+            <button class="filter-btn" data-filter="warning">WARNING</button>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="alerts-feed" id="alerts-feed">
+            <!-- Alerts will be injected here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-left">
+        <span class="footer-brand">◈ NEXUS SUPPLY CHAIN v2.0</span>
+        <span class="footer-separator">|</span>
+        <span class="footer-info">Adrien Tripon - Chef de Projet Supply Chain & SI</span>
+      </div>
+      <div class="footer-right">
+        <span class="data-status">
+          <span class="status-dot green"></span>
+          Data Sync Active
+        </span>
+        <span class="footer-separator">|</span>
+        <span class="last-update">Last refresh: <span id="last-refresh">14:32:00</span></span>
+      </div>
+    </footer>
+
   </div>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="header-content">
-      <a href="#hero" class="logo">
-        <span class="logo-icon">◈</span>
-        <span class="logo-text">AT</span>
-      </a>
-      <nav class="nav">
-        <a href="#kpis">Résultats</a>
-        <a href="#parcours">Parcours</a>
-        <a href="#projets">Projets</a>
-        <a href="#stack">Stack</a>
-        <a href="#carnet">Carnet</a>
-      </nav>
-      <a href="#contact" class="cta-button">Contact</a>
-      <button class="mobile-menu-toggle" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+  <!-- Import Modal -->
+  <div class="modal" id="import-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>◈ DATA IMPORT</h3>
+        <button class="modal-close" id="modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="import-zone" id="import-zone">
+          <div class="import-icon">⬆</div>
+          <p>Drop CSV or Excel file here</p>
+          <p class="import-hint">or click to browse</p>
+        </div>
+        <div class="import-preview" id="import-preview">
+          <!-- Preview will appear here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-import">Cancel</button>
+        <button class="btn btn-primary" id="confirm-import" disabled>Import Data</button>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-      <div class="hero-content">
-        <p class="hero-subtitle">Chef de Projet Supply Chain & SI</p>
-        <h1 class="hero-title">Adrien Tripon</h1>
-        <p class="hero-tagline">Orchestrer. Optimiser. Délivrer.</p>
-        <p class="hero-description">
-          Spécialiste du pilotage de projets d'intégration WMS/ERP,
-          de l'optimisation des flux logistiques et de l'orchestration
-          de systèmes interconnectés en environnements multi-sites et internationaux.
-        </p>
-        <div class="hero-ctas">
-          <a href="#parcours" class="btn btn-primary">Découvrir mon parcours</a>
-          <a href="#contact" class="btn btn-secondary">Me contacter</a>
-        </div>
-        <div class="hero-availability">
-          <span class="availability-dot"></span>
-          Disponible CDI — Île-de-France — ASAP
-        </div>
-      </div>
-      <div class="scroll-indicator" aria-hidden="true">
-        <span>Scroll</span>
-        <div class="scroll-arrow"></div>
-      </div>
-    </section>
-
-    <!-- KPIs Dashboard -->
-    <section id="kpis" class="kpis">
-      <div class="section-header">
-        <span class="section-tag">Résultats</span>
-        <h2 class="section-title">Impact Mesurable</h2>
-        <p class="section-subtitle">Des résultats concrets, quantifiés et vérifiables</p>
-      </div>
-      <div class="kpis-grid">
-        <div class="kpi-card" data-value="-30" data-suffix="%">
-          <div class="kpi-value"><span class="counter">0</span>%</div>
-          <div class="kpi-label">Délais de traitement</div>
-          <div class="kpi-context">Automatisation flux magasins Samsung</div>
-        </div>
-        <div class="kpi-card" data-value="-20" data-suffix="%">
-          <div class="kpi-value"><span class="counter">0</span>%</div>
-          <div class="kpi-label">Écarts de stock</div>
-          <div class="kpi-context">Optimisation KPI logistiques</div>
-        </div>
-        <div class="kpi-card" data-value="250" data-suffix="">
-          <div class="kpi-value"><span class="counter">0</span></div>
-          <div class="kpi-label">ETP pilotés</div>
-          <div class="kpi-context">Équipes pluridisciplinaires Arvato</div>
-        </div>
-        <div class="kpi-card" data-value="15" data-suffix="M€">
-          <div class="kpi-value"><span class="counter">0</span>M€</div>
-          <div class="kpi-label">Flux hebdomadaires</div>
-          <div class="kpi-context">Gestion projets SI Samsung</div>
-        </div>
-        <div class="kpi-card" data-value="-60" data-suffix="%">
-          <div class="kpi-value"><span class="counter">0</span>%</div>
-          <div class="kpi-label">Temps reporting</div>
-          <div class="kpi-context">Dashboard Power BI ERP/WMS</div>
-        </div>
-        <div class="kpi-card" data-value="+30" data-suffix="%">
-          <div class="kpi-value"><span class="counter">0</span>%</div>
-          <div class="kpi-label">Performance opérationnelle</div>
-          <div class="kpi-context">Déploiement SaaS Oplit</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Timeline / Parcours -->
-    <section id="parcours" class="parcours">
-      <div class="section-header">
-        <span class="section-tag">Parcours</span>
-        <h2 class="section-title">Expériences Clés</h2>
-        <p class="section-subtitle">Une progression constante vers l'excellence opérationnelle</p>
-      </div>
-      <div class="timeline">
-        <!-- Samsung -->
-        <div class="timeline-item" data-year="2024">
-          <div class="timeline-marker">
-            <span class="timeline-dot"></span>
-            <span class="timeline-line"></span>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="timeline-date">Octobre 2024 — Présent</span>
-              <span class="timeline-badge current">En poste</span>
-            </div>
-            <h3 class="timeline-title">Chef de Projet Supply Chain & SI Logistique</h3>
-            <p class="timeline-company">Samsung</p>
-            <ul class="timeline-achievements">
-              <li>Automatisation des flux vers +250 magasins : −30% délais de traitement</li>
-              <li>Optimisation des KPI : −20% écarts de stock et visibilité accrue</li>
-              <li>Gestion projets intégration SI impactant 15M€ de flux hebdomadaires</li>
-              <li>Développement reporting automatisé (VBA, Python) : −50% temps consolidation</li>
-              <li>Participation migration ERP et harmonisation flux SAP/M3</li>
-            </ul>
-            <div class="timeline-tags">
-              <span>SAP</span><span>M3</span><span>Python</span><span>VBA</span><span>Power BI</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Oplit -->
-        <div class="timeline-item" data-year="2023">
-          <div class="timeline-marker">
-            <span class="timeline-dot"></span>
-            <span class="timeline-line"></span>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="timeline-date">Septembre 2023 — Septembre 2024</span>
-            </div>
-            <h3 class="timeline-title">Chef de Projet Industriel & Customer Success</h3>
-            <p class="timeline-company">Oplit (SaaS)</p>
-            <ul class="timeline-achievements">
-              <li>Déploiement solution d'optimisation logistique chez 12 clients stratégiques</li>
-              <li>Intégration API et coordination IT/métiers pour flux ERP/WMS</li>
-              <li>Amélioration de 30% de la performance opérationnelle via dashboards</li>
-              <li>Accompagnement clients sur conduite du changement et formation</li>
-            </ul>
-            <div class="timeline-tags">
-              <span>SaaS</span><span>API</span><span>Power BI</span><span>Change Management</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Arvato -->
-        <div class="timeline-item" data-year="2020">
-          <div class="timeline-marker">
-            <span class="timeline-dot"></span>
-            <span class="timeline-line"></span>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="timeline-date">Septembre 2020 — Septembre 2023</span>
-            </div>
-            <h3 class="timeline-title">Directeur des Opérations Adjoint</h3>
-            <p class="timeline-company">Arvato Bertelsmann</p>
-            <ul class="timeline-achievements">
-              <li>Encadrement et coordination d'équipes pluridisciplinaires (250 ETP)</li>
-              <li>Déploiement tableau de bord Power BI connecté ERP/WMS : −60% temps reporting</li>
-              <li>Optimisation flux convoyeurs (+12% efficacité) et réduction coûts de 18% via Lean</li>
-              <li>Mise en conformité ISO 9001 & 13485, audits performance fournisseurs</li>
-            </ul>
-            <div class="timeline-tags">
-              <span>Power BI</span><span>Lean</span><span>ISO 9001</span><span>ISO 13485</span><span>WMS</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Printemps -->
-        <div class="timeline-item" data-year="2019">
-          <div class="timeline-marker">
-            <span class="timeline-dot"></span>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-header">
-              <span class="timeline-date">Décembre 2019 — Septembre 2020</span>
-            </div>
-            <h3 class="timeline-title">Chef d'équipe Logistique</h3>
-            <p class="timeline-company">Printemps Paris</p>
-            <ul class="timeline-achievements">
-              <li>Pilotage équipe préparateurs (20–30 ETP) : picking, packing, expéditions J/J+1</li>
-              <li>Gestion de stock : inventaires tournants, analyse écarts, fiabilisation</li>
-              <li>Suivi KPI opérationnels : OTIF, taux de service, casse/retours</li>
-              <li>Paramétrage WMS et formation nouveaux entrants</li>
-              <li>Sécurité & 5S : réduction quasi-accidents, −15% temps déplacement</li>
-            </ul>
-            <div class="timeline-tags">
-              <span>WMS</span><span>5S</span><span>OTIF</span><span>Retail</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Formation -->
-      <div class="formation">
-        <h3 class="formation-title">Formation</h3>
-        <div class="formation-grid">
-          <div class="formation-item">
-            <span class="formation-year">2024</span>
-            <div class="formation-content">
-              <strong>Master 2 Achats & Supply Chain</strong>
-              <span>PPA Business School</span>
-              <em>Mémoire : « Vers une Renaissance Industrielle »</em>
-            </div>
-          </div>
-          <div class="formation-item">
-            <span class="formation-year">2022</span>
-            <div class="formation-content">
-              <strong>BTS Méthodes et Exploitation Logistique</strong>
-              <span>ISTELI</span>
-            </div>
-          </div>
-          <div class="formation-item">
-            <span class="formation-year">2017</span>
-            <div class="formation-content">
-              <strong>Licence Technologies de l'Audiovisuel</strong>
-              <span>ISTS</span>
-            </div>
-          </div>
-        </div>
-        <div class="langues">
-          <span class="langue"><strong>Anglais</strong> C1 (TOEIC 930)</span>
-          <span class="langue"><strong>Espagnol</strong> C1</span>
-          <span class="langue"><strong>Chinois</strong> Débutant</span>
-          <span class="langue"><strong>Russe</strong> Débutant</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projets Majeurs -->
-    <section id="projets" class="projets">
-      <div class="section-header">
-        <span class="section-tag">Projets</span>
-        <h2 class="section-title">Réalisations Majeures</h2>
-        <p class="section-subtitle">Des projets à fort impact business et technique</p>
-      </div>
-      <div class="projets-grid">
-        <article class="projet-card">
-          <div class="projet-icon">⚡</div>
-          <h3 class="projet-title">Automatisation Flux Retail</h3>
-          <p class="projet-company">Samsung</p>
-          <p class="projet-description">
-            Automatisation complète des flux vers +250 magasins avec intégration
-            multi-systèmes (SAP, M3) et coordination équipes Europe/Corée.
-          </p>
-          <div class="projet-metrics">
-            <span>−30% délais</span>
-            <span>−20% écarts</span>
-            <span>15M€/semaine</span>
-          </div>
-        </article>
-
-        <article class="projet-card">
-          <div class="projet-icon">📊</div>
-          <h3 class="projet-title">Dashboard Power BI Unifié</h3>
-          <p class="projet-company">Arvato Bertelsmann</p>
-          <p class="projet-description">
-            Déploiement d'un tableau de bord connecté aux systèmes ERP/WMS
-            pour pilotage en temps réel des opérations logistiques.
-          </p>
-          <div class="projet-metrics">
-            <span>−60% temps reporting</span>
-            <span>Temps réel</span>
-          </div>
-        </article>
-
-        <article class="projet-card">
-          <div class="projet-icon">🔗</div>
-          <h3 class="projet-title">Intégration API Multi-clients</h3>
-          <p class="projet-company">Oplit</p>
-          <p class="projet-description">
-            Déploiement et intégration d'une solution SaaS d'optimisation
-            logistique avec connexions API vers les ERP/WMS clients.
-          </p>
-          <div class="projet-metrics">
-            <span>12 clients</span>
-            <span>+30% performance</span>
-          </div>
-        </article>
-
-        <article class="projet-card">
-          <div class="projet-icon">🏭</div>
-          <h3 class="projet-title">Certification ISO & Lean</h3>
-          <p class="projet-company">Arvato Bertelsmann</p>
-          <p class="projet-description">
-            Mise en conformité ISO 9001 & 13485 couplée à une démarche
-            Lean pour optimisation des flux convoyeurs.
-          </p>
-          <div class="projet-metrics">
-            <span>+12% efficacité</span>
-            <span>−18% coûts</span>
-          </div>
-        </article>
-
-        <article class="projet-card">
-          <div class="projet-icon">🐍</div>
-          <h3 class="projet-title">Reporting Automatisé Python</h3>
-          <p class="projet-company">Samsung</p>
-          <p class="projet-description">
-            Développement de scripts Python et VBA pour automatiser
-            la consolidation des données et le reporting opérationnel.
-          </p>
-          <div class="projet-metrics">
-            <span>−50% temps</span>
-            <span>Python/VBA</span>
-          </div>
-        </article>
-
-        <article class="projet-card">
-          <div class="projet-icon">🔄</div>
-          <h3 class="projet-title">Migration ERP SAP/M3</h3>
-          <p class="projet-company">Samsung</p>
-          <p class="projet-description">
-            Participation à la migration ERP et harmonisation des flux
-            inter-applicatifs entre SAP S/4HANA, M3 et systèmes legacy.
-          </p>
-          <div class="projet-metrics">
-            <span>Multi-ERP</span>
-            <span>International</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Stack Technique -->
-    <section id="stack" class="stack">
-      <div class="section-header">
-        <span class="section-tag">Compétences</span>
-        <h2 class="section-title">Stack Technique</h2>
-        <p class="section-subtitle">Maîtrise des outils SI et méthodologies Supply Chain</p>
-      </div>
-      <div class="stack-container">
-        <div class="stack-category">
-          <h3 class="stack-category-title">
-            <span class="stack-icon">🏢</span>
-            ERP
-          </h3>
-          <div class="stack-items">
-            <div class="stack-item">SAP S/4HANA</div>
-            <div class="stack-item">Cegid</div>
-            <div class="stack-item">M3 (Infor)</div>
-            <div class="stack-item">Oracle SCM</div>
-            <div class="stack-item">Sage X3</div>
-          </div>
-        </div>
-
-        <div class="stack-category">
-          <h3 class="stack-category-title">
-            <span class="stack-icon">📦</span>
-            WMS / TMS
-          </h3>
-          <div class="stack-items">
-            <div class="stack-item">Reflex WMS</div>
-            <div class="stack-item">3PL Systems</div>
-            <div class="stack-item">API / ESB / EAI</div>
-            <div class="stack-item">Orchestration de flux</div>
-          </div>
-        </div>
-
-        <div class="stack-category">
-          <h3 class="stack-category-title">
-            <span class="stack-icon">📈</span>
-            Data & Dev
-          </h3>
-          <div class="stack-items">
-            <div class="stack-item">Power BI</div>
-            <div class="stack-item">SQL</div>
-            <div class="stack-item">Python</div>
-            <div class="stack-item">Excel VBA</div>
-            <div class="stack-item">Power Query</div>
-          </div>
-        </div>
-
-        <div class="stack-category">
-          <h3 class="stack-category-title">
-            <span class="stack-icon">🎯</span>
-            Méthodes
-          </h3>
-          <div class="stack-items">
-            <div class="stack-item">Lean Six Sigma</div>
-            <div class="stack-item">Scrum / Kanban</div>
-            <div class="stack-item">S&OP / OTIF</div>
-            <div class="stack-item">Conduite du changement</div>
-            <div class="stack-item">Gestion des risques</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Soft Skills -->
-      <div class="soft-skills">
-        <h3 class="soft-skills-title">Soft Skills</h3>
-        <div class="soft-skills-list">
-          <span>Leadership collaboratif</span>
-          <span>Résilience</span>
-          <span>Communication claire</span>
-          <span>Esprit critique</span>
-          <span>Autonomie</span>
-          <span>Gestion du stress</span>
-          <span>Curiosité technologique</span>
-          <span>Esprit analytique</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Carnet de Bord -->
-    <section id="carnet" class="carnet">
-      <div class="section-header">
-        <span class="section-tag">Carnet de Bord</span>
-        <h2 class="section-title">Réflexions & Apprentissages</h2>
-        <p class="section-subtitle">Mon journal de progression professionnelle</p>
-      </div>
-      <div class="carnet-intro">
-        <p>
-          Ce carnet documente mon parcours, mes réflexions sur la Supply Chain
-          et les systèmes d'information, ainsi que les leçons tirées de chaque projet.
-        </p>
-      </div>
-      <div class="carnet-entries" id="carnet-list">
-        <!-- Les entrées seront ajoutées dynamiquement -->
-      </div>
-      <form id="carnet-form" class="carnet-form">
-        <div class="form-group">
-          <input type="text" id="carnet-title" placeholder="Titre de l'entrée" required />
-        </div>
-        <div class="form-group">
-          <textarea id="carnet-content" placeholder="Votre réflexion, apprentissage ou retour d'expérience..." rows="4" required></textarea>
-        </div>
-        <div class="form-group">
-          <select id="carnet-category">
-            <option value="reflexion">Réflexion</option>
-            <option value="projet">Retour projet</option>
-            <option value="apprentissage">Apprentissage</option>
-            <option value="veille">Veille tech</option>
-          </select>
-          <button type="submit" class="btn btn-primary">Ajouter</button>
-        </div>
-      </form>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="contact">
-      <div class="section-header">
-        <span class="section-tag">Contact</span>
-        <h2 class="section-title">Travaillons Ensemble</h2>
-        <p class="section-subtitle">Ouvert aux opportunités CDI en Île-de-France</p>
-      </div>
-      <div class="contact-grid">
-        <a href="mailto:adrien.tripon@gmail.com" class="contact-card">
-          <span class="contact-icon">✉</span>
-          <span class="contact-label">Email</span>
-          <span class="contact-value">adrien.tripon@gmail.com</span>
-        </a>
-        <a href="tel:+33768776191" class="contact-card">
-          <span class="contact-icon">📱</span>
-          <span class="contact-label">Téléphone</span>
-          <span class="contact-value">+33 7 68 77 61 91</span>
-        </a>
-        <a href="https://linkedin.com/in/adrien-tripon" target="_blank" rel="noopener" class="contact-card">
-          <span class="contact-icon">💼</span>
-          <span class="contact-label">LinkedIn</span>
-          <span class="contact-value">adrien-tripon</span>
-        </a>
-        <a href="https://github.com/casanostro" target="_blank" rel="noopener" class="contact-card">
-          <span class="contact-icon">⌨</span>
-          <span class="contact-label">GitHub</span>
-          <span class="contact-value">casanostro</span>
-        </a>
-      </div>
-      <div class="contact-availability">
-        <span class="availability-dot"></span>
-        <strong>Disponibilité :</strong> CDI — Île-de-France — Début ASAP
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p class="footer-copyright">&copy; 2024 Adrien Tripon — Chef de Projet Supply Chain & SI</p>
-      <p class="footer-tagline">Orchestrer. Optimiser. Délivrer.</p>
+  <!-- Notifications Panel -->
+  <div class="notifications-panel" id="notifications-panel">
+    <div class="notif-header">
+      <h3>◈ NOTIFICATIONS</h3>
+      <button class="notif-clear" id="clear-notifs">Clear All</button>
     </div>
-  </footer>
+    <div class="notif-list" id="notif-list">
+      <!-- Notifications will be injected here -->
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
