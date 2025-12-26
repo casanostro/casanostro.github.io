@@ -1,429 +1,70 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="NEXUS Supply Chain - Real-time Operations Dashboard" />
-  <title>NEXUS | Supply Chain Command Center</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        main {
+            min-height: 50vh;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-  <!-- Scanlines overlay -->
-  <div class="scanlines" aria-hidden="true"></div>
+    <div class="container">
+        <header>
+            <h1>Bienvenue</h1>
+            <p class="subtitle">Portfolio en construction</p>
+        </header>
 
-  <!-- Grid background -->
-  <div class="grid-bg" aria-hidden="true"></div>
+        <main>
+            <p>Cette page est en cours de développement.</p>
+        </main>
 
-  <!-- Main Container -->
-  <div class="dashboard">
-
-    <!-- Header -->
-    <header class="header">
-      <div class="header-left">
-        <div class="logo glitch" data-text="NEXUS">
-          <span class="logo-icon">◈</span>
-          NEXUS
-        </div>
-        <span class="logo-subtitle">SUPPLY CHAIN COMMAND CENTER</span>
-      </div>
-      <div class="header-center">
-        <div class="status-bar">
-          <span class="status-item online">
-            <span class="status-dot"></span>
-            SYSTEM ONLINE
-          </span>
-          <span class="status-item">
-            <span class="status-icon">◉</span>
-            <span id="active-connections">6</span> NODES ACTIVE
-          </span>
-        </div>
-      </div>
-      <div class="header-right">
-        <button class="header-btn" id="import-btn" title="Import Data">
-          <span class="btn-icon">⬆</span>
-          <span class="btn-text">IMPORT</span>
-        </button>
-        <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden />
-        <div class="notifications" id="notifications-btn">
-          <span class="notif-icon">🔔</span>
-          <span class="notif-badge" id="notif-count">3</span>
-        </div>
-        <div class="datetime">
-          <div class="date" id="current-date">25/12/2024</div>
-          <div class="time" id="current-time">14:32:00</div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Global KPIs -->
-    <section class="global-kpis">
-      <div class="section-header">
-        <span class="section-tag">◢ GLOBAL METRICS ◣</span>
-      </div>
-      <div class="kpis-row">
-        <div class="kpi-card" data-status="good">
-          <div class="kpi-icon">◎</div>
-          <div class="kpi-value" id="kpi-otif">94.2<span class="kpi-unit">%</span></div>
-          <div class="kpi-label">OTIF RATE</div>
-          <div class="kpi-trend up">▲ +2.1%</div>
-          <div class="kpi-spark" id="spark-otif"></div>
-        </div>
-        <div class="kpi-card" data-status="good">
-          <div class="kpi-icon">◈</div>
-          <div class="kpi-value" id="kpi-flux">12.4<span class="kpi-unit">M€</span></div>
-          <div class="kpi-label">WEEKLY FLOW</div>
-          <div class="kpi-trend up">▲ +5.3%</div>
-          <div class="kpi-spark" id="spark-flux"></div>
-        </div>
-        <div class="kpi-card" data-status="warning">
-          <div class="kpi-icon">◇</div>
-          <div class="kpi-value" id="kpi-orders">847</div>
-          <div class="kpi-label">ACTIVE ORDERS</div>
-          <div class="kpi-trend down">▼ -12</div>
-          <div class="kpi-spark" id="spark-orders"></div>
-        </div>
-        <div class="kpi-card" data-status="good">
-          <div class="kpi-icon">◆</div>
-          <div class="kpi-value" id="kpi-service">98.1<span class="kpi-unit">%</span></div>
-          <div class="kpi-label">SERVICE RATE</div>
-          <div class="kpi-trend up">▲ +0.8%</div>
-          <div class="kpi-spark" id="spark-service"></div>
-        </div>
-        <div class="kpi-card" data-status="good">
-          <div class="kpi-icon">◐</div>
-          <div class="kpi-value" id="kpi-costs">-18<span class="kpi-unit">%</span></div>
-          <div class="kpi-label">COST DELTA</div>
-          <div class="kpi-trend up">▲ vs LY</div>
-          <div class="kpi-spark" id="spark-costs"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Main Grid -->
-    <section class="main-grid">
-
-      <!-- AMONT -->
-      <div class="panel panel-amont">
-        <div class="panel-header">
-          <span class="panel-icon">▼</span>
-          <h2 class="panel-title">AMONT</h2>
-          <span class="panel-subtitle">Upstream Operations</span>
-        </div>
-        <div class="panel-content">
-          <div class="metric-row">
-            <span class="metric-label">Lead Time</span>
-            <span class="metric-value" id="amont-leadtime">4.2j</span>
-          </div>
-          <div class="progress-container">
-            <div class="progress-label">Supplier Performance</div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="amont-progress" style="width: 82%"></div>
-              <span class="progress-value">82%</span>
-            </div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">In Transit</span>
-            <span class="metric-value highlight" id="amont-transit">234</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Pending Orders</span>
-            <span class="metric-value" id="amont-pending">89</span>
-          </div>
-          <div class="mini-chart">
-            <canvas id="chart-amont"></canvas>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <span class="update-time">Updated 2min ago</span>
-        </div>
-      </div>
-
-      <!-- AVAL -->
-      <div class="panel panel-aval">
-        <div class="panel-header">
-          <span class="panel-icon">▲</span>
-          <h2 class="panel-title">AVAL</h2>
-          <span class="panel-subtitle">Downstream Distribution</span>
-        </div>
-        <div class="panel-content">
-          <div class="metric-row">
-            <span class="metric-label">OTIF Rate</span>
-            <span class="metric-value good" id="aval-otif">94.2%</span>
-          </div>
-          <div class="progress-container">
-            <div class="progress-label">Delivery Performance</div>
-            <div class="progress-bar">
-              <div class="progress-fill cyan" id="aval-progress" style="width: 87%"></div>
-              <span class="progress-value">87%</span>
-            </div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Backlog</span>
-            <span class="metric-value warning" id="aval-backlog">156</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Today's Shipments</span>
-            <span class="metric-value" id="aval-shipments">312</span>
-          </div>
-          <div class="mini-chart">
-            <canvas id="chart-aval"></canvas>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <span class="update-time">Updated 1min ago</span>
-        </div>
-      </div>
-
-      <!-- APPRO -->
-      <div class="panel panel-appro">
-        <div class="panel-header">
-          <span class="panel-icon">◆</span>
-          <h2 class="panel-title">APPRO</h2>
-          <span class="panel-subtitle">Procurement & Stock</span>
-        </div>
-        <div class="panel-content">
-          <div class="metric-row">
-            <span class="metric-label">Coverage</span>
-            <span class="metric-value" id="appro-coverage">18j</span>
-          </div>
-          <div class="progress-container">
-            <div class="progress-label">Stock Level</div>
-            <div class="progress-bar">
-              <div class="progress-fill magenta" id="appro-progress" style="width: 64%"></div>
-              <span class="progress-value">64%</span>
-            </div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Stockouts</span>
-            <span class="metric-value danger" id="appro-stockouts">12</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Reorder Queue</span>
-            <span class="metric-value" id="appro-reorder">47</span>
-          </div>
-          <div class="mini-chart">
-            <canvas id="chart-appro"></canvas>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <span class="update-time">Updated 3min ago</span>
-        </div>
-      </div>
-
-      <!-- LOGISTIQUE -->
-      <div class="panel panel-logistique">
-        <div class="panel-header">
-          <span class="panel-icon">⚡</span>
-          <h2 class="panel-title">LOGISTIQUE</h2>
-          <span class="panel-subtitle">Transport & Warehousing</span>
-        </div>
-        <div class="panel-content">
-          <div class="metric-row">
-            <span class="metric-label">Fill Rate</span>
-            <span class="metric-value good" id="log-fillrate">91%</span>
-          </div>
-          <div class="progress-container">
-            <div class="progress-label">Fleet Utilization</div>
-            <div class="progress-bar">
-              <div class="progress-fill green" id="log-progress" style="width: 91%"></div>
-              <span class="progress-value">91%</span>
-            </div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Transport Cost</span>
-            <span class="metric-value" id="log-cost">234K€</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Active Trucks</span>
-            <span class="metric-value highlight" id="log-trucks">47</span>
-          </div>
-          <div class="mini-chart">
-            <canvas id="chart-logistique"></canvas>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <span class="update-time">Updated 30s ago</span>
-        </div>
-      </div>
-
-      <!-- DWH -->
-      <div class="panel panel-dwh">
-        <div class="panel-header">
-          <span class="panel-icon">💾</span>
-          <h2 class="panel-title">DWH</h2>
-          <span class="panel-subtitle">Data Warehouse</span>
-        </div>
-        <div class="panel-content">
-          <div class="metric-row">
-            <span class="metric-label">Uptime</span>
-            <span class="metric-value good" id="dwh-uptime">99.2%</span>
-          </div>
-          <div class="progress-container">
-            <div class="progress-label">Storage Used</div>
-            <div class="progress-bar">
-              <div class="progress-fill cyan" id="dwh-progress" style="width: 68%"></div>
-              <span class="progress-value">2.4TB</span>
-            </div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">ETL Jobs</span>
-            <span class="metric-value" id="dwh-jobs">142<span class="metric-sub">/145</span></span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Failed Jobs</span>
-            <span class="metric-value warning" id="dwh-failed">3</span>
-          </div>
-          <div class="mini-chart">
-            <canvas id="chart-dwh"></canvas>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <span class="update-time">Live sync</span>
-        </div>
-      </div>
-
-      <!-- DTD -->
-      <div class="panel panel-dtd">
-        <div class="panel-header">
-          <span class="panel-icon">🎯</span>
-          <h2 class="panel-title">DTD</h2>
-          <span class="panel-subtitle">Data To Decision</span>
-        </div>
-        <div class="panel-content">
-          <div class="alerts-summary">
-            <div class="alert-item critical">
-              <span class="alert-icon">▲</span>
-              <span class="alert-count" id="dtd-critical">1</span>
-              <span class="alert-label">Critical</span>
-            </div>
-            <div class="alert-item warning">
-              <span class="alert-icon">●</span>
-              <span class="alert-count" id="dtd-warning">2</span>
-              <span class="alert-label">Warning</span>
-            </div>
-            <div class="alert-item info">
-              <span class="alert-icon">◆</span>
-              <span class="alert-count" id="dtd-info">5</span>
-              <span class="alert-label">Info</span>
-            </div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Models Active</span>
-            <span class="metric-value" id="dtd-models">8</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Predictions/Day</span>
-            <span class="metric-value highlight" id="dtd-predictions">1.2K</span>
-          </div>
-          <div class="mini-chart">
-            <canvas id="chart-dtd"></canvas>
-          </div>
-        </div>
-        <div class="panel-footer">
-          <span class="update-time">AI-Powered</span>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Trend Chart -->
-    <section class="trend-section">
-      <div class="panel panel-wide">
-        <div class="panel-header">
-          <span class="panel-icon">📈</span>
-          <h2 class="panel-title">PERFORMANCE TREND</h2>
-          <div class="chart-controls">
-            <button class="chart-btn active" data-period="week">7D</button>
-            <button class="chart-btn" data-period="month">30D</button>
-            <button class="chart-btn" data-period="quarter">90D</button>
-            <button class="chart-btn" data-period="year">1Y</button>
-          </div>
-        </div>
-        <div class="panel-content">
-          <div class="trend-chart">
-            <canvas id="chart-trend"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Alerts Feed -->
-    <section class="alerts-section">
-      <div class="panel panel-wide">
-        <div class="panel-header">
-          <span class="panel-icon">⚠</span>
-          <h2 class="panel-title">LIVE ALERTS FEED</h2>
-          <div class="alerts-filter">
-            <button class="filter-btn active" data-filter="all">ALL</button>
-            <button class="filter-btn" data-filter="critical">CRITICAL</button>
-            <button class="filter-btn" data-filter="warning">WARNING</button>
-          </div>
-        </div>
-        <div class="panel-content">
-          <div class="alerts-feed" id="alerts-feed">
-            <!-- Alerts will be injected here -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-left">
-        <span class="footer-brand">◈ NEXUS SUPPLY CHAIN v2.0</span>
-        <span class="footer-separator">|</span>
-        <span class="footer-info">Adrien Tripon - Chef de Projet Supply Chain & SI</span>
-      </div>
-      <div class="footer-right">
-        <span class="data-status">
-          <span class="status-dot green"></span>
-          Data Sync Active
-        </span>
-        <span class="footer-separator">|</span>
-        <span class="last-update">Last refresh: <span id="last-refresh">14:32:00</span></span>
-      </div>
-    </footer>
-
-  </div>
-
-  <!-- Import Modal -->
-  <div class="modal" id="import-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>◈ DATA IMPORT</h3>
-        <button class="modal-close" id="modal-close">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="import-zone" id="import-zone">
-          <div class="import-icon">⬆</div>
-          <p>Drop CSV or Excel file here</p>
-          <p class="import-hint">or click to browse</p>
-        </div>
-        <div class="import-preview" id="import-preview">
-          <!-- Preview will appear here -->
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" id="cancel-import">Cancel</button>
-        <button class="btn btn-primary" id="confirm-import" disabled>Import Data</button>
-      </div>
+        <footer>
+            <p>&copy; 2025</p>
+        </footer>
     </div>
-  </div>
-
-  <!-- Notifications Panel -->
-  <div class="notifications-panel" id="notifications-panel">
-    <div class="notif-header">
-      <h3>◈ NOTIFICATIONS</h3>
-      <button class="notif-clear" id="clear-notifs">Clear All</button>
-    </div>
-    <div class="notif-list" id="notif-list">
-      <!-- Notifications will be injected here -->
-    </div>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
