@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="ie=edge" http-equiv="x-ua-compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Newsletter KPI – Supply (Généré le 25/12/2025 16:32)</title>
+<style>
+  :root {
+    --tile-bg: #f8fafc;
+    --tile-bd: #e5e7eb;
+    --tile-fg: #0f172a;
+    --tile-sub:#6b7280;
+    --ink:#0c0c0d; --muted:#6b7280; --bd:#e5e7eb; --head:#111827; --bg:#ffffff;
+    --s1:#ef4444; --s2:#f59e0b; --s3:#d97706; --s4:#10b981; --s5:#059669;
+    --d1:#fda4af; --d2:#93c5fd; --d3:#60a5fa; --d4:#3b82f6; --d5:#1d4ed8;
+  }
+  body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; color:#111827; background:#fff; margin:0; padding:0; }
+  .wrapper { width:100%; padding:20px 0; background:#f6f7fb; }
+  .container { width:680px; margin:0 auto; background:#ffffff; border:1px solid #e5e7eb; }
+  .header { padding:16px 24px; border-bottom:1px solid #e5e7eb; }
+  .h1 { font-size:18px; line-height:24px; font-weight:bold; color:#111827; }
+  .badge { display:inline-block; padding:2px 8px; font-size:11px; background:#eef2ff; color:#3730a3; border-radius:12px; margin-left:8px; }
+  .content { padding:16px 24px 12px 24px; color:#111827; }
+  .kpi-card { border:1px solid #e5e7eb; border-radius:8px; padding:12px; }
+  .kpi-title { font-size:12px; color:#6b7280; margin:0 0 6px 0; }
+  .kpi-value { font-size:26px; font-weight:bold; margin:0; display:inline-block; padding:8px 30px; background:#fafafa; }
+  .hr { height:1px; background:#e5e7eb; margin:16px 0; }
+  .chart-title { font-size:14px; font-weight:bold; margin:0 0 10px 0; }
+  .tiles-grid-table { width:100%; }
+  .tile-card { width:100%; border:1px solid #e5e7eb; border-radius:10px; margin-bottom:8px; }
+  .tile-left { width:44%; padding:8px 10px; vertical-align:middle; }
+  .tile-right { width:56%; padding:6px 8px; vertical-align:middle; }
+  .tile-name { font-size:12px; color:#6b7280; }
+  .tile-value { font-size:20px; font-weight:bold; color:#111827; }
+  .tile-flopfamille1 {font-size: 11px; margin: 2px 0; color:#db6a0e}
+  .tile-flopfamille2 {font-size: 11px; margin: 2px 0; color:#2e48da}
+  .tile-flopfamille3 {font-size: 11px; margin: 2px 0; color:#68625d}
+  .tile-title {font-size: 12px; margin: 4px 0; color:#000000; font-weight:bold;}
+  h1 { font-size:14px; margin:8px 0 4px 10px; color:#374151; }
+
+  /* Couleurs des KPI */
+  .band-s1 { color:#a80404 !important; }
+  .band-s2 { color:#f50b0b !important; }
+  .band-s3 { color:#e07a06 !important; }
+  .band-s4 { color:#10b981 !important; }
+  .band-s5 { color:#059669 !important; }
+  .band-na { color:#6b7280 !important; }
+  .delta-pos { color:#059669 !important; font-weight:700; }
+  .delta-neg { color:#ef4444 !important; font-weight:700; }
+
+  /* Page 2 - Tableau détaillé */
+  .wrap { max-width:1320px; margin:0 auto; padding:18px; }
+  table { width:100%; border-collapse:collapse; margin-bottom:16px; }
+  thead th { font-size:12px; text-transform:uppercase; letter-spacing:.06em; text-align:left; padding:8px 10px; color:#374151; border-bottom:1px solid var(--bd); background:#f9fafb; }
+  tbody td { padding:8px 10px; border-bottom:1px solid var(--bd); font-size:13px; vertical-align:middle; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .cat-row td { background:#fcfcfd; font-weight:700; }
+  .b-s1,.b-s2,.b-s3,.b-s4,.b-s5,.b-d1,.b-d2,.b-d3,.b-d4,.b-na { display:inline-block; min-width:64px; text-align:center; border-radius:6px; padding:3px 6px; font-weight:700; }
+  .b-s1 { background:#ef4444; color:white }
+  .b-s2 { background:#f59e0b; color:black }
+  .b-s3 { background:#d97706; color:white }
+  .b-s4 { background:#10b981; color:white }
+  .b-s5 { background:#059669; color:white }
+  .b-d1 { background:#fda4af; color:#000 }
+  .b-d3 { background:#60a5fa; color:white }
+  .b-na { background:#e5e7eb; color:#111827 }
+  .sub { color:#6b7280; font-size:12px; }
+
+  /* Styles pour les commentaires */
+  .comment-input {
+    width: 100%;
+    min-width: 200px;
+    padding: 6px 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .comment-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: #f0f9ff;
+  }
+  .comment-input.has-value {
+    background-color: #f0fdf4;
+    border-color: #10b981;
+  }
+
+  /* Toolbar pour les actions */
+  .comment-toolbar {
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    border-bottom: 2px solid #e5e7eb;
+    padding: 12px 18px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .btn {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+  }
+  .btn-primary {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+  .btn-primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+  }
+  .btn-success {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+  }
+  .btn-success:hover {
+    background: #059669;
+    border-color: #059669;
+  }
+  .status-msg {
+    margin-left: auto;
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+  }
+  .status-msg.success {
+    color: #10b981;
+  }
+
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    .page-break { page-break-before: always; }
+    .comment-toolbar { display: none; }
+  }
+  @media only screen and (max-width: 700px) {
+    .container { width:100% !important; }
+    .tiles-grid-table td { display:block; width:100% !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== PAGE 1 : Dashboard KPI ========== -->
+<div class="wrapper">
+<table border="0" cellpadding="0" cellspacing="0" class="container" role="presentation">
+<tr>
+<td class="header">
+<div class="h1">KPI Supply – Franprix <span class="badge">Auto-généré</span></div>
+</td>
+</tr>
+<tr>
+<td class="content">
+
+<!-- KPIs Globaux -->
+<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+<tr>
+<td class="kpi-card" style="width:33%">
+  <div class="kpi-title">Taux de service global</div>
+  <div class="kpi-value band-s3">94.5%</div>
+</td>
+<td class="kpi-card" style="width:33%">
+  <div class="kpi-title">Évolution sur les dernières semaines</div>
+  <div class="kpi-value"><span class="delta-pos">+1.6%</span></div>
+</td>
+<td class="kpi-card" style="width:33%">
+  <div class="kpi-title">Moyenne des semaines</div>
+  <div class="kpi-value band-s3">94.1%</div>
+</td>
+</tr>
+</table>
+
+<div class="hr"></div>
+
+<!-- Entrepôts -->
+<div class="chart-title">Entrepôts</div>
+<table border="0" cellpadding="6" cellspacing="0" class="tiles-grid-table" role="presentation" width="100%">
+<tr>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+<h1>Sec</h1>
+<td class="tile-left">
+<div class="tile-name">Chennevieres</div>
+<div class="tile-value band-s3">94.6%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_39" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#1f77b4" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#1f77b4" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 12 L 65 40 L 115 16 L 165 26 L 165 44 Z" fill="url(#grad_39)" stroke="none"></path>
+<path d="M 15 12 L 65 40 L 115 16 L 165 26" fill="none" stroke="#1f77b4" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="8">95.4%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="34">93.8%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="10">95.1%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="20">94.6%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="26" fill="#1f77b4" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+<h1>Surgelé</h1>
+<td class="tile-left">
+<div class="tile-name">Orlygel Fp</div>
+<div class="tile-value band-s3">94.5%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_1653" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#1f77b4" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#1f77b4" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 12 L 65 40 L 115 12 L 165 23 L 165 44 Z" fill="url(#grad_1653)" stroke="none"></path>
+<path d="M 15 12 L 65 40 L 115 12 L 165 23" fill="none" stroke="#1f77b4" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="8">96.3%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="34">91.6%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="8">96.3%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="17">94.5%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="23" fill="#1f77b4" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+<h1>Frais</h1>
+<td class="tile-left">
+<div class="tile-name">Gonesse Flux Stocké</div>
+<div class="tile-value band-s3">93.3%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_8446" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#1f77b4" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#1f77b4" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 12 L 65 40 L 115 18 L 165 20 L 165 44 Z" fill="url(#grad_8446)" stroke="none"></path>
+<path d="M 15 12 L 65 40 L 115 18 L 165 20" fill="none" stroke="#1f77b4" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="8">94.1%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="34">91.1%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="12">93.5%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="14">93.3%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="20" fill="#1f77b4" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+
+<td class="tile-left">
+<div class="tile-name">Direct Chennevières</div>
+<div class="tile-value band-s5">99.0%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_208" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#1f77b4" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#1f77b4" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 40 L 65 12 L 115 40 L 165 33 L 165 44 Z" fill="url(#grad_208)" stroke="none"></path>
+<path d="M 15 40 L 65 12 L 115 40 L 165 33" fill="none" stroke="#1f77b4" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="34">98.8%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="8">99.6%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="34">98.8%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="27">99.0%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="33" fill="#1f77b4" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+
+<td class="tile-left">
+<div class="tile-name">Palette complète Bonneuil</div>
+<div class="tile-value band-s3">91.3%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_3129" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#1f77b4" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#1f77b4" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 40 L 65 18 L 115 12 L 165 25 L 165 44 Z" fill="url(#grad_3129)" stroke="none"></path>
+<path d="M 15 40 L 65 18 L 115 12 L 165 25" fill="none" stroke="#1f77b4" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="34">90.9%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="12">91.5%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="8">91.6%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="19">91.3%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="25" fill="#1f77b4" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+<td valign="top" width="33.33%"></td>
+</tr>
+</table>
+
+<div class="hr"></div>
+
+<!-- Surtypologies -->
+<div class="chart-title">Surtypologies</div>
+<table border="0" cellpadding="6" cellspacing="0" class="tiles-grid-table" role="presentation" width="100%">
+<tr>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+
+<td class="tile-left">
+<div class="tile-name">LP</div>
+<div class="tile-value band-s3">93.0%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_7553" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#2ca02c" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#2ca02c" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 16 L 65 40 L 115 12 L 165 27 L 165 44 Z" fill="url(#grad_7553)" stroke="none"></path>
+<path d="M 15 16 L 65 40 L 115 12 L 165 27" fill="none" stroke="#2ca02c" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="10">94.8%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="34">90.8%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="8">95.4%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="21">93.0%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="27" fill="#2ca02c" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+
+<td class="tile-left">
+<div class="tile-name">MFP</div>
+<div class="tile-value band-s3">93.4%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_5065" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#2ca02c" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#2ca02c" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 15 L 65 40 L 115 12 L 165 22 L 165 44 Z" fill="url(#grad_5065)" stroke="none"></path>
+<path d="M 15 15 L 65 40 L 115 12 L 165 22" fill="none" stroke="#2ca02c" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="9">94.3%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="34">91.1%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="8">94.7%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="16">93.4%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="22" fill="#2ca02c" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+<td valign="top" width="33.33%"><table border="0" cellpadding="0" cellspacing="0" class="tile-card" role="presentation">
+<tr>
+
+<td class="tile-left">
+<div class="tile-name">MN</div>
+<div class="tile-value band-s3">94.4%</div>
+</td>
+<td class="tile-right">
+<svg aria-label="sparkline" height="52" role="img" viewBox="0 0 180 52" width="180" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="grad_650" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#2ca02c" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#2ca02c" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path d="M 15 44 L 15 12 L 65 40 L 115 24 L 165 24 L 165 44 Z" fill="url(#grad_650)" stroke="none"></path>
+<path d="M 15 12 L 65 40 L 115 24 L 165 24" fill="none" stroke="#2ca02c" stroke-linecap="round" stroke-width="2"></path>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="8">95.0%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="34">93.6%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="18">94.4%</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="18">94.4%</text>
+<text fill="#6b7280" font-size="9" text-anchor="middle" x="15" y="50">S45</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="65" y="50">S46</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="115" y="50">S48</text><text fill="#6b7280" font-size="9" text-anchor="middle" x="165" y="50">Total</text>
+<circle cx="165" cy="24" fill="#2ca02c" r="3.2"></circle>
+</svg>
+</td>
+</tr>
+</table></td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+</div>
+
+<!-- ========== PAGE 2 : Tableau détaillé ========== -->
+<d
